@@ -3,7 +3,7 @@
 Plugin Name: WpPDE
 Plugin URI: http://marathontesting.com
 Description: Plugin development environment for Wordpress
-Version: 0.9
+Version: 0.9.1
 Author: Dakshinamurthy Karra
 Author URI: http://marathontesting.com
 License: GPL2

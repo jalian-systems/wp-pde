@@ -4,7 +4,7 @@ Donate link: http://wp-pde.jaliansystems.com
 Tags: widgets, pde, development environment, actions, hooks, types, menu pages, metaboxes
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 0.9
+Stable tag: 0.9.1
 
 A development environment for creating plugins with support for widgets, actions and hooks.
 
