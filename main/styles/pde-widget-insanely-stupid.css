@@ -1,0 +1,46 @@
+/*
+ * Default style for widgets
+*/
+
+.pde-widget-insanely-stupid {
+	font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: black;
+  color: white;
+  padding: 5px;
+  border: 2px solid pink ;
+}
+
+.pde-widget-insanely-stupid .pde_form_field {
+  padding: 5px 0 5px 0;
+}
+
+.pde_form_field.pde_form_checkbox .pde_form_title:after {
+	content: '' ;
+}
+
+.pde_form_field .pde_form_title:after {
+	content: ':' ;
+}
+
+.pde_form_field.pde_form_checkbox input,
+.pde_form_field.pde_form_radio input {
+	float: left ;
+	margin-right: 5px !important;
+}
+
+.pde-widget-insanely-stupid .description-small {
+  font-size: 9px;
+}
+
+.pde_form_field.pde_form_checkbox input,
+.pde_form_field.pde_form_radio input {
+	width: auto;
+}
+
+.pde_form_field.pde_form_radio .pde_form_radio_option {
+	padding-bottom: 5px;
+}
+
+.pde_form_field select, .pde_form_field input, .pde_form_field textarea {
+	width: 100%;
+}
