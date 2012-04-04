@@ -25,10 +25,6 @@ environment.
 
 WpPDE also facilitate easy creation of readme files for your plugins.
 
-Checkout this quick tour of WpPDE in action:
-
-[youtube http://youtube.com/http://www.youtube.com/watch?v=7EiKx_WSesk]
-
 ## Documentation
 
 * [WpPDE - Plugin Development Environment](http://wp-pde.jaliansystems.com/) - Official home page
