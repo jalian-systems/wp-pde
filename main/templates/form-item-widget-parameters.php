@@ -38,13 +38,6 @@
   </label>
 </p>
 
-<p class="field-value description description-wide">
-  <label for="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>">
-    <input type="checkbox" id="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>" value="description_html_escape" name="db-<?php echo $item->db_id; ?>[display_when]"<?php checked( isset( $item->description_html_escape ) ? $item->description_html_escape : '', 'description_html_escape' ); ?> />
-    <?php _e( 'Escape HTML in description' ); ?>
-  </label>
-</p>
-
 <p class="description description-thin">
   <label for="edit-form-item-width-<?php echo $item_id; ?>">
     <?php _e( 'Width' ); ?><br />

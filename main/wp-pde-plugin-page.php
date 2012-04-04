@@ -118,7 +118,6 @@ switch ( $action ) {
 
   case 'duplicate':
 		check_admin_referer( 'update-pde_plugin', 'update-pde-plugin-nonce' );
-    $messages[] = 'Trying to duplicate ' . $pde_plugin_selected_id;
     $new_plugin_title = trim( esc_html( $_REQUEST['plugin-name'] ) );
     $plugin_version = trim( esc_html ( $_REQUEST['plugin-version'] ) );
 
@@ -294,10 +293,10 @@ if (isset($_plugin_object)) {
 ?>
 <div class="wrap">
   <img src="<?php echo plugins_url('images/wppdelogo.png', __FILE__); ?>" height="62" width="166"/>
+
+  <?php foreach ($messages as $message ) echo $message ; ?>
+
   <div id="message-area">
-
-    <?php foreach ($messages as $message ) echo $message ; ?>
-
   </div>
 	<div id="pde-plugins-frame">
 	<div id="plugin-settings-column" class="metabox-holder<?php if ( !$pde_plugin_selected_id ) { echo ' metabox-holder-disabled'; } ?>">

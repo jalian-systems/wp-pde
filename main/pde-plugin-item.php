@@ -46,7 +46,11 @@ class PDEPluginItem {
     for ($i = 1; $i < $this->hook_args + 1; $i++)
       $args[] = '$arg' . $i ;
     $a = implode(', ', $args);
-    return "static function " . $this->hook_method . "( $a ) {\n\n}\n" ;
+    if( $this->param_type == 'filter' )
+      $r = "\n  return \$arg1;" ;
+    else
+      $r = '';
+    return "static function " . $this->hook_method . "( $a ) {\n$r\n}\n" ;
   }
 
   static function is_action($plugin_item) {

@@ -59,7 +59,7 @@ class PDE_Radio_Button {
 
   <p class="field-value description description-wide">
     <label for="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>">
-      <input type="checkbox" id="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>" value="description_html_escape" name="db-<?php echo $item->db_id; ?>[display_when]"<?php checked( isset( $item->description_html_escape ) ? $item->description_html_escape : '', 'description_html_escape' ); ?> />
+      <input type="checkbox" id="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>" value="description_html_escape" name="db-<?php echo $item->db_id; ?>[description_html_escape]"<?php checked( isset( $item->description_html_escape ) ? $item->description_html_escape : '', 'description_html_escape' ); ?> />
       <?php _e( 'Escape HTML in description' ); ?>
     </label>
   </p>
@@ -151,8 +151,9 @@ class PDE_Radio_Button {
         <input class="wp_pde_radio_button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
                name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
                type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value;?>'); @>
-               value="<?php echo esc_attr($value);?>" />
-        <div class="pde_form_radio_option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></div>
+               value="<?php echo esc_attr($value);?>" >
+          <span class="pde_form_radio_option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
+        </input>
 <?php if( !empty( $description ) ): ?>
         <div class="description-small"><?php echo $description; ?></div>
 <?php endif; ?>

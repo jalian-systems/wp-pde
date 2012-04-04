@@ -127,7 +127,6 @@ class Walker_widget_update extends Walker_PDE_Form {
 
 	function start_el(&$output, $item, $depth, $args) {
     $php_var = $item->get_php_variable();
-    $default_val = $item->get_default_value();
     if ( empty( $php_var ) )
       return;
     if( in_array( $item->param_type, array( 'text', 'password', 'textarea' ) ) ) {
@@ -148,7 +147,7 @@ class Walker_widget_update extends Walker_PDE_Form {
     if( isset( $new_instance['<?php echo $php_var; ?>'] ) )
       $instance['<?php echo $php_var; ?>'] = $new_instance['<?php echo $php_var; ?>'] ;
     else
-      $instance['<?php echo $php_var; ?>'] = '<?php echo $default_val; ?>' ;
+      $instance['<?php echo $php_var; ?>'] = '' ;
 <?php
       $widget_update = ob_get_clean();
     }

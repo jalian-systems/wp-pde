@@ -1,6 +1,5 @@
 <?php
   $var = $item->get_php_variable();
-  $title = $item->get_title();
   if( empty( $item->description_html_escape ) )
     $description = $item->get_description() ;
   else
@@ -11,12 +10,12 @@
 ?>
     <div class="pde_form_field pde_form_dropdown <?php echo $var; ?>">
       <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-      <div class="pde_form_title"><@php esc_html_e( __('<?php echo $title; ?>') ); @></div>
+      <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
         <select name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
 <?php foreach( $options as $key => $value ) {
         $value = esc_attr($value);
         $esc_value = esc_html($value); ?>
-          <option value="<?php echo $value; ?>"<@php selected( $instance['<?php echo $var; ?>'], '<?php echo $value; ?>' ); ?>><@php _e('<?php echo $esc_value; ?>'); ?></option>
+          <option value="<?php echo $value; ?>"<@php selected( $instance['<?php echo $var; ?>'], <?php _pv( $value ); ?> ); ?>><@php _e('<?php echo $esc_value; ?>'); ?></option>
 <?php } ?>
         </select>
 <?php if( !empty( $description ) ): ?>

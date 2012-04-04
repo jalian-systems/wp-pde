@@ -1,7 +1,6 @@
 <?php
   $var = $item->get_php_variable();
   $value = esc_attr($item->get_value());
-  $title = $item->get_title();
   if( empty( $item->description_html_escape ) )
     $description = $item->get_description() ;
   else
@@ -14,7 +13,7 @@
            value="<?php echo $value; ?>"
            name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>"
            type="checkbox"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value; ?>'); @> />
-      <div class="pde_form_title"><@php esc_html_e( __('<?php echo $title; ?>') ); @></div>
+      <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
 <?php if( !empty( $description ) ): ?>
       <div class="description-small"><?php echo $description; ?></div>
 <?php endif; ?>

@@ -196,7 +196,6 @@ class PDEPlugin {
 
   function export_project($project_dir, $export_mode, &$messages) {
     // Set the variables used in the template
-    $ww_wp_pde_url = 'http://marathontesting.com/topics/wp-pde';
     $plugin = $this ;
     $plugin_name = $this->plugin_name ;
     $plugin_version = $this->plugin_version;
@@ -522,7 +521,7 @@ class PDEPlugin {
             Want to create custom taxonomies, post types, mataboxes and admin pages using PDE?
           </p>
           <p>
-            <a href="http://wp-pde.jaliansystems.com/pde-pro-add-on-pack-for-wppde/">WpPDE Pro</a> plugin adds this functionality (and more)  to your
+            <a href="http://wp-pde.jaliansystems.com/wp-pde-pro-add-on-pack-for-wppde/">WpPDE Pro</a> plugin adds this functionality (and more)  to your
             PDE installation.
           </p>
           <p style="text-align:center"><a href="http://wp-pde.jaliansystems.com/buy-now/" class="submit button-primary">Buy Now</a></p>
@@ -647,32 +646,32 @@ class PDEPlugin {
 
     <p id="metadiv-description-wrap">
       <label class="metabox-normal-label" for="metadiv-description"><?php _e('Description:'); ?></label>
-        <input id="metadiv-description" name="meta_short_description" value="<?php echo $meta_short_description; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-description" name="meta_short_description" value="<?php echo esc_attr( $meta_short_description ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-plugin-uri-wrap">
       <label class="metabox-normal-label" for="metadiv-plugin-uri"><?php _e('Plugin URI:'); ?></label>
-        <input id="metadiv-plugin-uri" name="meta_plugin_uri" value="<?php echo $meta_plugin_uri; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-plugin-uri" name="meta_plugin_uri" value="<?php echo esc_attr( $meta_plugin_uri ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-author-wrap">
       <label class="metabox-normal-label" for="metadiv-author"><?php _e('Author:'); ?></label>
-        <input id="metadiv-author" name="meta_author" value="<?php echo $meta_author; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-author" name="meta_author" value="<?php echo esc_attr( $meta_author ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-author-uri-wrap">
       <label class="metabox-normal-label" for="metadiv-author-uri"><?php _e('Author URI:'); ?></label>
-        <input id="metadiv-author-uri" name="meta_author_uri" value="<?php echo $meta_author_uri; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-author-uri" name="meta_author_uri" value="<?php echo esc_attr( $meta_author_uri ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-copyright-wrap">
       <label class="metabox-normal-label" for="metadiv-copyright"><?php _e('Copyright:'); ?></label>
-      <input id="metadiv-copyright" name="meta_copyright" value="<?php echo $meta_copyright; ?>"  type="text" class=" widefat metabox-normal-input "  />
+      <input id="metadiv-copyright" name="meta_copyright" value="<?php echo esc_attr( $meta_copyright ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-license-wrap">
       <label class="metabox-normal-label" for="metadiv-license"><?php _e('License (code):'); ?></label>
-        <input id="metadiv-license" name="meta_license" value="<?php echo $meta_license; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-license" name="meta_license" value="<?php echo esc_attr( $meta_license ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-license-blurb-wrap">
@@ -682,32 +681,32 @@ class PDEPlugin {
 
     <p id="metadiv-contributors-wrap">
       <label class="metabox-normal-label" for="metadiv-contributors"><?php _e('Contributors:'); ?></label>
-        <input id="metadiv-contributors" name="meta_contributors" value="<?php echo $meta_contributors; ?>"  type="text" class=" widefat metabox-normal-input "  />
+        <input id="metadiv-contributors" name="meta_contributors" value="<?php echo esc_attr( $meta_contributors ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-donate-link-wrap">
       <label class="metabox-normal-label" for="metadiv-donate-link"><?php _e('Donate link:'); ?></label>
-      <input id="metadiv-donate-link" name="meta_donate_link" value="<?php echo $meta_donate_link; ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-url "  />
+      <input id="metadiv-donate-link" name="meta_donate_link" value="<?php echo esc_attr( $meta_donate_link ); ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-url "  />
     </p>
 
     <p id="metadiv-tags-wrap">
       <label class="metabox-normal-label" for="metadiv-tags"><?php _e('Tags:'); ?></label>
-      <input id="metadiv-tags" name="meta_tags" value="<?php echo $meta_tags; ?>"  type="text" class=" widefat metabox-normal-input "  />
+      <input id="metadiv-tags" name="meta_tags" value="<?php echo esc_attr( $meta_tags ); ?>"  type="text" class=" widefat metabox-normal-input "  />
     </p>
 
     <p id="metadiv-requires-at-least-wrap">
       <label class="metabox-normal-label" for="metadiv-requires-at-least"><?php _e('Requires at least:'); ?></label>
-        <input id="metadiv-requires-at-least" name="meta_requires_at_least" value="<?php echo $meta_requires_at_least; ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
+        <input id="metadiv-requires-at-least" name="meta_requires_at_least" value="<?php echo esc_attr( $meta_requires_at_least ); ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
     </p>
 
     <p id="metadiv-tested-upto-wrap">
       <label class="metabox-normal-label" for="metadiv-tested-upto"><?php _e('Tested upto:'); ?></label>
-      <input id="metadiv-tested-upto" name="meta_tested_upto" value="<?php echo $meta_tested_upto; ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
+      <input id="metadiv-tested-upto" name="meta_tested_upto" value="<?php echo esc_attr( $meta_tested_upto ); ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
     </p>
 
     <p id="metadiv-stable-tag-wrap">
       <label class="metabox-normal-label" for="metadiv-stable-tag"><?php _e('Stable tag:'); ?></label>
-      <input id="metadiv-stable-tag" name="meta_stable_tag" value="<?php echo $meta_stable_tag; ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
+      <input id="metadiv-stable-tag" name="meta_stable_tag" value="<?php echo esc_attr( $meta_stable_tag ); ?>"  type="text" class=" widefat metabox-normal-input metabox-normal-input-version "  />
     </p>
 
     <p id="metadiv-long-description-wrap">

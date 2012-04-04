@@ -56,7 +56,7 @@ class PDEFormItem {
   function get_option_values() {
     if( !isset( $this->options ) )
       return array();
-    $values = array_map( 'trim', explode(",", $this->options));
+    $values = array_map( 'trim', str_getcsv( $this->options ) );
     $keys = array_map( 'sanitize_title_with_dashes', $values ) ;
     return array_combine($keys, $values);
   }

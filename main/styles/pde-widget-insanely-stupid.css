@@ -22,6 +22,10 @@
 	content: ':' ;
 }
 
+.pde_form_field .pde_form_title:empty:after {
+	content: '' ;
+}
+
 .pde_form_field.pde_form_checkbox input,
 .pde_form_field.pde_form_radio input {
 	float: left ;
@@ -33,6 +37,7 @@
 }
 
 .pde_form_field.pde_form_checkbox input,
+.pde_form_field.pde_form_radio_button input,
 .pde_form_field.pde_form_radio input {
 	width: auto;
 }

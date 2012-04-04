@@ -1,14 +1,12 @@
 <@php
 <?php $x_widget_name = $widget->get_name() . ($export_mode === 'test' ? ' - dev' : ''); 
-		  $x_desc = var_export( addcslashes( $widget->get_description(), "\r\n\"" ), true );
-			$x_desc = substr( $x_desc, 1, strlen( $x_desc ) - 2 );
 ?>
 /**
  * <?php echo esc_comments($x_widget_name); ?> widget class
  */
 class <?php echo $widget->get_classname($plugin); ?> extends WP_Widget {
   function __construct() {
-    $widget_ops = array('classname' => '<?php echo $widget->get_classname($plugin); ?>', 'description' => __( "<?php echo $x_desc; ?>" ) );
+    $widget_ops = array('classname' => '<?php echo $widget->get_classname($plugin); ?>', 'description' => __( <?php _pv( $widget->get_description() ); ?> ) );
     <?php 
           $w_width = $widget->get_width(); $w_height = $widget->get_height();
           if( !empty($w_width) || !empty($w_height))  {
@@ -24,7 +22,7 @@ class <?php echo $widget->get_classname($plugin); ?> extends WP_Widget {
             $control_ops = ", array( $vals )";
           }
     ?>
-    parent::__construct('<?php echo $widget->get_classname($plugin); ?>', __('<?php echo esc_js($x_widget_name); ?>'), $widget_ops <?php if(isset($control_ops)) echo $control_ops; ?>);
+    parent::__construct('<?php echo $widget->get_classname($plugin); ?>', __(<?php _pv( $x_widget_name ); ?>), $widget_ops <?php if(isset($control_ops)) echo $control_ops; ?>);
   }
 
   function widget( $sidebar, $instance ) {

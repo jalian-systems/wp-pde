@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WpPDE
-Plugin URI: http://marathontesting.com
+Plugin URI: http://wp-pde.jaliansystems.com
 Description: Plugin development environment for Wordpress
 Version: 0.9.1
 Author: Dakshinamurthy Karra
-Author URI: http://marathontesting.com
+Author URI: http://wp-pde.jaliansystems.com
 License: GPL2
 */
 /*  Copyright 2012  Dakshinamurthy Karra (dakshinamurthy.karra@jaliansystems.com)
@@ -430,6 +430,12 @@ class WpPDEPlugin {
     return $order;
   }
 
+}
+
+function _pv( $string, $return = false ) {
+  if( $return )
+    return var_export( addcslashes( $string, "\r\n'\"" ), true );
+  var_export( addcslashes( $string, "\r\n'\"" ) );
 }
 
 WpPDEPlugin::register_ww_types();
