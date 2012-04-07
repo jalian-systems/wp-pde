@@ -49,3 +49,35 @@
 .pde_form_field select, .pde_form_field input, .pde_form_field textarea {
 	width: 100%;
 }
+
+/* Color picker styling */
+
+.pde_form_field div.color-picker-div {
+}
+
+.pde_form_field div.color-picker-div .pde-plugin-pickcolor-text {
+  width:100px;
+}
+
+.pde_form_field div.color-picker-div .pde-plugin-pickcolor-example {
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #dfdfdf;
+	margin: 0 7px 0 3px;
+	padding: 4px 14px;
+  display: inline;
+}
+
+.pde_form_field div.color-picker-div .pde-plugin-pickcolor {
+  width:auto;
+  display:inline-block;
+}
+
+.pde_form_field div.color-picker-div .pde-plugin-pickcolor-popup {
+  z-index: 100;
+  background:#eee;
+  border:1px solid #ccc;
+  position:absolute;
+  display:none;
+}

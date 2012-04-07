@@ -3,7 +3,7 @@
 Plugin Name: WpPDE
 Plugin URI: http://wp-pde.jaliansystems.com
 Description: Plugin development environment for Wordpress
-Version: 0.9.1
+Version: 0.9.2
 Author: Dakshinamurthy Karra
 Author URI: http://wp-pde.jaliansystems.com
 License: GPL2

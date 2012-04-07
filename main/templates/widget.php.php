@@ -76,9 +76,31 @@ echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $ar
      $file = '<?php echo basename($widget->get_theme_file()); ?>';
      $script_id = '<?php echo sanitize_title_with_dashes( basename( $widget->get_theme_file(), '.css' ) ) ; ?>' ;
      wp_enqueue_style( $script_id, plugins_url( $file, __FILE__ ) );
+     do_action( '<?php echo sanitize_title_with_dashes( $widget->get_name() ); ?>_enqueue_css', null );
+<?php
+     $items = $widget->get_form_field_items() ;
+     $param_types_processed = array() ;
+     foreach( $items as $item ) {
+       if( !in_array( $item->param_type, $param_types_processed ) ) {
+         do_action( 'pde_custom_form_item_enqueue_css_for_' . $item->param_type, null ) ;
+         $param_types_processed[] = $item->param_type ;
+       }
+     }
+?>
   }
 }
 
 add_action("widgets_init", array('<?php echo $widget->get_classname($plugin); ?>', '__widgets_init'));
 add_action("load-widgets.php", array('<?php echo $widget->get_classname($plugin); ?>', '__enqueue_css'));
+
+<?php
+     $items = $widget->get_form_field_items() ;
+     $param_types_processed = array() ;
+     foreach( $items as $item ) {
+       if( !in_array( $item->param_type, $param_types_processed ) ) {
+         do_action( 'pde_custom_form_item_additional_code_for_' . $item->param_type, null ) ;
+         $param_types_processed[] = $item->param_type ;
+       }
+     }
+?>
 ?>

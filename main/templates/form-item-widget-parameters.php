@@ -10,15 +10,13 @@
     <?php _e('Theme'); ?><br />
     <select id="edit-form-item-theme-<?php echo $item_id; ?>" class="widefat code edit-form-item-theme" name="db-<?php echo $item_id; ?>[theme]">
 <?php
+      $a = unserialize( $item->theme );
+      $theme_value = $a['value'];
       $filter = 'pde_plugin_item_theme_for_widget' ;
       $options = apply_filters($filter, array());
       foreach( $options as $option ) {
-      if(isset($item->theme)) {
-        $a = unserialize( $item->theme );
-        $theme_value = $a['value'];
-      }
 ?>
-      <option value="<?php echo esc_attr(serialize($option)); ?>" <?php selected( !empty( $theme_value ) ? $theme_value : '', $option['value'] ); ?>><?php _e($option['display']); ?></option>
+        <option value="<?php echo esc_attr(serialize($option)); ?>" <?php selected( !empty( $theme_value ) ? $theme_value : '', $option['value'] ); ?>><?php _e($option['display']); ?></option>
 <?php
       }
 ?>

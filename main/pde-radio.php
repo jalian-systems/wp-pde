@@ -177,17 +177,19 @@ class PDE_Radio_Button {
   ?>
   <script type="text/javascript">
   (function($) {
-    $('#<@php echo $this->get_field_id("wp_pde_form"); @>').on('change', '.wp_pde_radio_button', function (e) {
-      $.each( $('input[name="' + $(e.target).attr('name') + '"]'), function(index, item) {
-        group = '#group-' + $(item).attr('id');
-        if($(group).size() > 0 && !$(group).hasClass('display_always')) {
-          if( ( $(item).attr('checked') != 'checked' && $(group).hasClass('display_when_unselected') )
-                || ( $(item).attr('checked') == 'checked' && $(group).hasClass('display_when_selected') ) )
-            d = 'block' ;
-          else
-            d = 'none';
-          $(group).css('display', d);
-        }
+    $(document).ready( function() {
+      $('#wpbody-content').on('change', '.wp_pde_radio_button', function (e) {
+        $.each( $('input[name="' + $(e.target).attr('name') + '"]'), function(index, item) {
+          group = '#group-' + $(item).attr('id');
+          if($(group).size() > 0 && !$(group).hasClass('display_always')) {
+            if( ( $(item).attr('checked') != 'checked' && $(group).hasClass('display_when_unselected') )
+                  || ( $(item).attr('checked') == 'checked' && $(group).hasClass('display_when_selected') ) )
+              d = 'block' ;
+            else
+              d = 'none';
+            $(group).css('display', d);
+          }
+        });
       });
     });
   })(jQuery);

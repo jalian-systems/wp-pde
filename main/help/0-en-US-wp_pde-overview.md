@@ -16,6 +16,8 @@ plugins.
 * Create custom post types and taxonomies.
 * Create metaboxes and attach them to custom or standard post types.
 * Create menu pages.
+* WpPDE Pro also adds support for additional form items.
+
 
 #### Requirements
 

@@ -139,9 +139,7 @@ class Walker_widget_update extends Walker_PDE_Form {
         $lhs = 'stripslashes ( '. $lhs . ' )';
 
       $widget_update = "    \$instance['$php_var'] = " . $lhs . ";\n";
-    }
-
-    if( in_array( $item->param_type, array( 'dropdown', 'radio', 'checkbox' ) ) ) {
+    } else {
       ob_start();
 ?>
     if( isset( $new_instance['<?php echo $php_var; ?>'] ) )

@@ -53,6 +53,8 @@ require_once dirname(__FILE__) . '/pde-widget.php' ;
 
 require_once dirname(__FILE__) . '/pde-radio.php' ;
 require_once dirname(__FILE__) . '/pde-dropdown.php' ;
+require_once dirname(__FILE__) . '/pde-color-picker.php' ;
+require_once dirname(__FILE__) . '/pde-date-picker.php' ;
 
 if( !function_exists( 'Markdown' ) ) {
   if( isset($wp_version) ) {
@@ -242,6 +244,23 @@ class PDEPlugin {
       fclose($fp);
 			chmod( $filename, 0777 );
     }
+
+    if( !is_dir( $project_dir . '/styles' ) )
+      mkdir( $project_dir . '/styles' );
+
+    copy( dirname( __FILE__ ) . '/styles/jquery-ui-1.8.18.custom.css', $project_dir . '/styles/jquery-ui-1.8.18.custom.css' );
+    $this->rcopy( dirname( __FILE__ ) . '/styles/images', $project_dir . '/styles/images' );
+  }
+
+  function rcopy($src, $dst) {
+    if (file_exists($dst)) $this->rrmdir($dst);
+    if (is_dir($src)) {
+      mkdir($dst);
+      $files = scandir($src);
+      foreach ($files as $file)
+      if ($file != "." && $file != "..") $this->rcopy("$src/$file", "$dst/$file");
+    }
+    else if (file_exists($src)) copy($src, $dst);
   }
 
   function generate_widgets( $export_mode, &$toremove, $project_dir ) {
@@ -1066,6 +1085,11 @@ class PDEPlugin {
   }
 
   function create_widget_info_item ( $widget, &$messages ) {
+    $value = 'pde-widget-default' ;
+    $file = dirname( __FILE__ ) . '/styles/' . 'pde-widget-default.css' ;
+    $display = 'Default' ;
+    $theme = serialize( compact ( array( 'value', 'file', 'display' ) ) ) ;
+
     $args = array(
       'title' => $widget->title,
       'param_type' => 'widget parameters',
@@ -1073,6 +1097,7 @@ class PDEPlugin {
       'strip_tags' => '',
       'strip_slashes' => '',
       'position' => 1,
+      'theme' => $theme,
     );
 
     return PDEFormItem::create( $widget->db_id, $this->plugin_id, $args, $messages );
@@ -1159,6 +1184,7 @@ class PDEPlugin {
 		wp_enqueue_script('ace_0.2-mode-markdown');
 		wp_enqueue_script('ace_0.2-mode-css');
 		wp_enqueue_script('ace_0.2-mode-javascript');
+    wp_enqueue_script('jquery-ui-datepicker');
   }
 
   function emit_editor_widgets($current_file) {

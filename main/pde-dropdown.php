@@ -191,17 +191,19 @@ class PDE_Dropdown_Item {
   ?>
   <script type="text/javascript">
   (function($) {
-    $('#<@php echo $this->get_field_id("wp_pde_form"); @>').on('change', '.wp_pde_dropdown_item', function (e) {
-      $(e.target).children('option').each( function (index, item) {
-        group = '#group-' + $(item).attr('id');
-        if($(group).size() > 0 && !$(group).hasClass('display_always')) {
-          if( ( $(item).attr('selected') != 'selected' && $(group).hasClass('display_when_unselected') )
-                || ( $(item).attr('selected') == 'selected' && $(group).hasClass('display_when_selected') ) )
-            d = 'block' ;
-          else
-            d = 'none';
-          $(group).css('display', d);
-        }
+    $(document).ready(function() {
+      $('#wpbody-content').on('change', '.wp_pde_dropdown_item', function (e) {
+        $(e.target).children('option').each( function (index, item) {
+          group = '#group-' + $(item).attr('id');
+          if($(group).size() > 0 && !$(group).hasClass('display_always')) {
+            if( ( $(item).attr('selected') != 'selected' && $(group).hasClass('display_when_unselected') )
+                  || ( $(item).attr('selected') == 'selected' && $(group).hasClass('display_when_selected') ) )
+              d = 'block' ;
+            else
+              d = 'none';
+            $(group).css('display', d);
+          }
+        });
       });
     });
   })(jQuery);
