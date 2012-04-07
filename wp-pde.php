@@ -252,7 +252,9 @@ class WpPDEPlugin {
 		$mode = 'readwrite' ;
 		$ace_mode = 'php';
     $can_add_items = false ;
-    if (PDEPluginItem::is_source_file( $item ) || PDEPluginItem::is_hook( $item ) ||
+    if( !empty( $item->binary ) ) {
+      WpPDEPlugin::json_die( 'error', WpPDEPlugin::messages( 'error', 'Do not know how to edit the file: ' . $item->title ), '' );
+    } else if (PDEPluginItem::is_source_file( $item ) || PDEPluginItem::is_hook( $item ) ||
             (PDEPluginItem::is_form( $item ) && isset( $_REQUEST['form-source'] ))) {
       $r = $item->get_source( $messages ) ;
       $mime_type = "text" ;

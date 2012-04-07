@@ -57,7 +57,9 @@ switch ( $action ) {
         } else {
           $path = empty( $_REQUEST['file_path'] ) ? '' : $_REQUEST['file_path'] ;
           $filename = $path . '/' . basename($file_entry['name']) ;
-          $_plugin_object->create_external_file($filename, file_get_contents( $file_entry['tmp_name'] ) );
+          $item = $_plugin_object->create_external_file($filename, file_get_contents( $file_entry['tmp_name'] ) );
+          if( is_wp_error( $item ) )
+            WpPDEPlugin::messages('error', $item->get_error_message(), $messages);
         }
       }
       $files = $_plugin_object->get_external_file_items();

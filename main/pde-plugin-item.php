@@ -3,6 +3,9 @@
 class PDEPluginItem {
 
   function update_source($newcontent, &$messages) {
+    if( !empty( $this->binary ) ) {
+      $newcontent = addcslashes( convert_uuencode( $newcontent ), "\\" ) ;
+    }
     if (wp_update_post(array('ID' => $this->db_id, 'post_content' => $newcontent))) {
       if( $messages )
         WpPDEPlugin::messages('updated fade', __('Contents saved'), $messages);
@@ -100,11 +103,13 @@ class PDEPluginItem {
   }
 
   static function create( $plugin_id, $title, $param_type, $param_args, $content = '') {
+    $binary = empty( $param_args['binary'] ) ? false : true ;
+
     $post = array(
 			'ID' => 0,
       'menu_order' => 0,
       'ping_status' => 0,
-      'post_content' => $content,
+      'post_content' => $binary ? addcslashes( convert_uuencode( $content ), "\\" ) : $content ,
       'post_excerpt' => serialize( array ( 'type' => $param_type, 'args' => $param_args) ),
       'post_parent' => 0,
       'post_title' => $title,
@@ -147,7 +152,11 @@ class PDEPluginItem {
 			foreach ($param_type['args'] as $key => $value) {
 				$plugin_item->$key = $value ;
     }
-    $plugin_item->content = $post->post_content ;
+    if( !empty( $plugin_item->binary ) )
+      $plugin_item->content = convert_uudecode( $post->post_content ) ;
+    else
+      $plugin_item->content = $post->post_content ;
+
     return $plugin_item;
   }
 

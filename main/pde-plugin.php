@@ -1018,8 +1018,14 @@ class PDEPlugin {
   }
 
   function create_external_file($filename, $content = '') {
-    return PDEPluginItem::create( $this->plugin_id, $filename,  'plugin_source', array( 'generated' => false ), $content);
+		if ( $this->get_source_item( $filename ) )
+			return new WP_Error( 'file-exists', sprintf( __( 'A file with the given path <strong>%s</strong> is already taken.' ), $filename ) );
+    return PDEPluginItem::create( $this->plugin_id, $filename,  'plugin_source', array( 'generated' => false, 'binary' => $this->is_binary($content) ), $content);
   }
+
+  function is_binary($content) {
+    return preg_match( '/[^\001-\177]/', substr( $content, 0, 512 ) );
+  } 
 
   function create_hook($pluginitem_type, $pluginitem_name, $item_args, &$messages) {
     extract($item_args);
