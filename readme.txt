@@ -92,27 +92,24 @@ You can change the editor options using the `Editor Options` box.
 
 = 0.9.2 =
 
-Features:
-    * Updated help files.
-    * Added support for date and color pickers
-
-Bugs Squashed:
-    * Binary file uploads works properly now.
-    * If a binary file is selected for edit, an error message is shown.
-    * Duplicate files are not allowed for uploading.
-    * Unneeded message in duplicate project.
-    * Changed references to marathontesting.com to wp-pde.jaliansystems.com
-    * Updated/corrected links to WpPDE site in online help.
-    * Fixed issue with description_html_escape being wrongly set to display_when variable.
-    * Widget Parameters: removed description_html_escape field. Not used in for this field.
-    * Widget#update should not be using default values.
-    * When giving options for radio and dropdown, the options can be enclosed in '"' so that a ',' can be escaped if required.
-    * Fixed display of colon at the end of an empty title.
-    * Added return statement to 'filter' plugin item.
-    * Delinked message-area from the static messages when the plugin is refreshed.
-    * Fixed: radio button css
-    * Escaping quotes in titles, descriptions.
-    * About metabox - used esc_attr at some places.
+* Updated help files.
+* Added support for date and color pickers
+* Binary file uploads works properly now.
+* If a binary file is selected for edit, an error message is shown.
+* Duplicate files are not allowed for uploading.
+* Unneeded message in duplicate project.
+* Changed references to marathontesting.com to wp-pde.jaliansystems.com
+* Updated/corrected links to WpPDE site in online help.
+* Fixed issue with description_html_escape being wrongly set to display_when variable.
+* Widget Parameters: removed description_html_escape field. Not used in for this field.
+* Widget#update should not be using default values.
+* When giving options for radio and dropdown, the options can be enclosed in '"' so that a ',' can be escaped if required.
+* Fixed display of colon at the end of an empty title.
+* Added return statement to 'filter' plugin item.
+* Delinked message-area from the static messages when the plugin is refreshed.
+* Fixed: radio button css
+* Escaping quotes in titles, descriptions.
+* About metabox - used esc_attr at some places.
 
 = 0.9 =
 * First release
