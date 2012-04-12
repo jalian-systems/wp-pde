@@ -1,4 +1,4 @@
-=== WpPDE ==
+=== WpPDE ===
 Contributors: kdmurthy
 Donate link: http://wp-pde.jaliansystems.com
 Tags: widgets, pde, development environment, actions, hooks, types, menu pages, metaboxes
