@@ -110,6 +110,10 @@ You can change the editor options using the `Editor Options` box.
 
 ## Changelog
 
+### 0.9.3
+
+* Compatibility changes for Wordpress 3.4 beta 2
+
 ### 0.9.2
 
 #### Features:

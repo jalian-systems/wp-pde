@@ -12,6 +12,7 @@
 }
 
 .toplevel_page_wp_pde #post-body-content {
+  width: auto;
 	margin-right: 200px;
 }
 

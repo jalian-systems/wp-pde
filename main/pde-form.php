@@ -108,7 +108,7 @@ class PDEForm extends PDEPluginItem {
   static function max_depth($classes) {
     global $_ww_pde_plugin_max_depth;
     if( !isset($_ww_pde_plugin_max_depth) )
-      $_ww_pde_plugin_max_depth = 11;
+      $_ww_pde_plugin_max_depth = 8;
     return "$classes form-max-depth-$_ww_pde_plugin_max_depth";
   }
 

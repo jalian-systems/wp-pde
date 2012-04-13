@@ -4,7 +4,7 @@ Donate link: http://wp-pde.jaliansystems.com
 Tags: widgets, pde, development environment, actions, hooks, types, menu pages, metaboxes
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 0.9.2
+Stable tag: 0.9.3
 
 A development environment for creating plugins with support for widgets, actions and hooks.
 
@@ -89,6 +89,10 @@ You can change the editor options using the `Editor Options` box.
 4. The editor
 
 == Changelog ==
+
+= 0.9.3 =
+
+* Compatibility changes for Wordpress 3.4 beta 2
 
 = 0.9.2 =
 
