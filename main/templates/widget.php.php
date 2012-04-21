@@ -36,7 +36,7 @@ echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $ar
   $source = $widget->content;
   if( preg_match( '/^\/\*.*\*\//msU', $source ) )
       $source = preg_replace( '/^\/\*.*\*\//msU', '', $source );
-  echo '    ' . str_replace("\n", "\n    ", $source . "\n"); ?>
+  echo '    ' . addcslashes( str_replace("\n", "\n    ", $source . "\n"), '\\' ); ?>
 /* Display */
 
 <?php if( $widget->do_wrap()) echo '    echo $sidebar["after_widget"];'; echo "\n" ?>
@@ -58,7 +58,7 @@ echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $ar
                 );
     $instance = wp_parse_args( (array) $instance, $defaults);
     @>
-    <div id='<@php echo $this->get_field_id("wp_pde_form"); @>' class="pde_widget <?php echo $widget->get_theme_value(); ?>">
+    <div id='<@php echo $this->get_field_id("wp-pde-form"); @>' class="pde-widget <?php echo $widget->get_theme_value(); ?>">
     <@php
 <?php $args = array ('walker' => new Walker_form());
 echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $args );

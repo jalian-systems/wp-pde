@@ -18,6 +18,11 @@ class PDEWidget extends PDEForm {
     return $info->title;
   }
 
+  function get_title() {
+    $info = $this->_get_info();
+    return $info->title;
+  }
+
   function get_description() {
     $info = $this->_get_info();
     return isset( $info->description ) ? $info->description : '' ;
@@ -86,6 +91,7 @@ class PDEWidget extends PDEForm {
       if( empty( $php_variable ) || $item->param_type == 'widget parameters')
         continue ;
       $item_preface = ' * $' . $php_variable . ' ' . $item->type_label;
+      unset( $values );
       if( $item->param_type == 'radio' || $item->param_type == 'dropdown' )
         $values = $item->get_option_values();
       else if( $item->param_type == 'checkbox' )

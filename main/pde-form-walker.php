@@ -1,4 +1,5 @@
-<?
+<?php
+
 class Walker_PDE_Form extends Walker {
 	var $tree_type = array( 'custom' );
 

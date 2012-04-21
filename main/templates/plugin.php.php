@@ -57,12 +57,12 @@ class <?php $classname = $plugin->get_classname(); echo $classname; ?> {
 
 <?php $items = $plugin->get_action_items();
       foreach( $items as $item ) {
-        echo "  " . str_replace("\n", "\n  ", $item->content); echo "\n";
+        echo "  " . addcslashes( str_replace("\n", "\n  ", $item->content), '\\' ); echo "\n";
       }
       unset($items);
       $items = $plugin->get_filter_items();
       foreach( $items as $item ) {
-        echo "  " . str_replace("\n", "\n  ", $item->content); echo "\n";
+        echo "  " . addcslashes( str_replace("\n", "\n  ", $item->content), '\\' ); echo "\n";
       }
       unset($items);
 ?>

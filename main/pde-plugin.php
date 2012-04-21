@@ -56,6 +56,8 @@ require_once dirname(__FILE__) . '/pde-dropdown.php' ;
 require_once dirname(__FILE__) . '/pde-color-picker.php' ;
 require_once dirname(__FILE__) . '/pde-date-picker.php' ;
 
+require_once dirname(__FILE__) . '/export.php' ;
+
 if( !function_exists( 'Markdown' ) ) {
   if( isset($wp_version) ) {
     $wp_version_bak = $wp_version ;
@@ -1065,6 +1067,7 @@ class PDEPlugin {
     $widget = PDEPluginItem::create( $this->plugin_id, $pluginitem_name,  'widget', array());
     if ( !$widget || is_wp_error ( $widget ) )
       return $widget ;
+    delay_for_export();
     $this->create_widget_info_item( $widget, $messages );
     $title_item = $this->create_title_item( $widget, $messages );
     $widget->update_source_preface(array($title_item), $messages, true);
@@ -1217,7 +1220,7 @@ class PDEPlugin {
     if ($child)
       $edit_url = add_query_arg(array('form-source' => 'true'), $edit_url);
     $edit_url = wp_nonce_url($edit_url, 'edit-file-' . $item->db_id);
-    $file = $child ? esc_html($item->title.':display()') : esc_html($item->title);
+    $file = $child ? esc_html($item->get_title().':display()') : esc_html($item->get_title());
     $o = '<li' . $cls . '><a class="edit-file-link" href="' . $edit_url . '">' . $file . "</a>$delete_url</li>\n" ;
     echo $o;
   }

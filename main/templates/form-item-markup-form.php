@@ -5,7 +5,8 @@
     $markup = Markdown( $markup );
 ?>
 @>
-      <div class="pde_form_field pde_form_markup markup-style-<?php echo $style; ?>">
+      <div class="pde-form-field pde-form-markup markup-style-<?php echo $style; ?>">
         <?php echo $markup; ?>
       </div>
+
 <@php 

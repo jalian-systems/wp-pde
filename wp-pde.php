@@ -440,6 +440,15 @@ function _pv( $string, $return = false ) {
   var_export( addcslashes( $string, "\r\n'\"" ) );
 }
 
+function delay_for_export( ) {
+  /*
+    Wordpress export checks for the existance of a duplicate post using the title and date. This causes problems
+    for exporting plugin projects since we use the widget/menu etc. titles for creating other parameter items also.
+    The simplest solution is to delay the creation of the next item by 1 second
+   */
+  sleep( 1 );
+}
+
 WpPDEPlugin::register_ww_types();
 PDEPlugin::load_test_plugins();
 add_action('admin_init', array('WpPDEPlugin', 'admin_init'));
