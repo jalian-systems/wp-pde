@@ -56,6 +56,8 @@ require_once dirname(__FILE__) . '/pde-dropdown.php' ;
 require_once dirname(__FILE__) . '/pde-color-picker.php' ;
 require_once dirname(__FILE__) . '/pde-date-picker.php' ;
 
+require_once dirname(__FILE__) . '/export.php' ;
+
 if( !function_exists( 'Markdown' ) ) {
   if( isset($wp_version) ) {
     $wp_version_bak = $wp_version ;
