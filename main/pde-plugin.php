@@ -1067,6 +1067,7 @@ class PDEPlugin {
     $widget = PDEPluginItem::create( $this->plugin_id, $pluginitem_name,  'widget', array());
     if ( !$widget || is_wp_error ( $widget ) )
       return $widget ;
+    delay_for_export();
     $this->create_widget_info_item( $widget, $messages );
     $title_item = $this->create_title_item( $widget, $messages );
     $widget->update_source_preface(array($title_item), $messages, true);
