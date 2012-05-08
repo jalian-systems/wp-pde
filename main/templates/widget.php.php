@@ -36,7 +36,7 @@ echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $ar
   $source = $widget->content;
   if( preg_match( '/^\/\*.*\*\//msU', $source ) )
       $source = preg_replace( '/^\/\*.*\*\//msU', '', $source );
-  echo '    ' . str_replace("\n", "\n    ", $source . "\n"); ?>
+  echo '    ' . addcslashes( str_replace("\n", "\n    ", $source . "\n"), '\\' ); ?>
 /* Display */
 
 <?php if( $widget->do_wrap()) echo '    echo $sidebar["after_widget"];'; echo "\n" ?>
