@@ -1220,7 +1220,7 @@ class PDEPlugin {
     if ($child)
       $edit_url = add_query_arg(array('form-source' => 'true'), $edit_url);
     $edit_url = wp_nonce_url($edit_url, 'edit-file-' . $item->db_id);
-    $file = $child ? esc_html($item->title.':display()') : esc_html($item->title);
+    $file = $child ? esc_html($item->get_title().':display()') : esc_html($item->get_title());
     $o = '<li' . $cls . '><a class="edit-file-link" href="' . $edit_url . '">' . $file . "</a>$delete_url</li>\n" ;
     echo $o;
   }

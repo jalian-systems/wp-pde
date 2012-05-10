@@ -18,6 +18,11 @@ class PDEWidget extends PDEForm {
     return $info->title;
   }
 
+  function get_title() {
+    $info = $this->_get_info();
+    return $info->title;
+  }
+
   function get_description() {
     $info = $this->_get_info();
     return isset( $info->description ) ? $info->description : '' ;
