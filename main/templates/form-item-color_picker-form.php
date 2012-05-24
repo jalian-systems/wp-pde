@@ -9,7 +9,8 @@
 @>
     <div class="pde_form_field pde_form_text <?php echo $var; ?>">
       <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-      <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
+      <span class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+      </label>
       <div class="color-picker-div">
         <input type="text" value="<@php echo $<?php echo $var; ?>; ?>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>" class="pde-plugin-pickcolor-text"/>
         <a href="#" class="pde-plugin-pickcolor-example hide-if-no-js" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-example"></a>
@@ -17,9 +18,8 @@
         <div id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-colorPickerDiv" class="pde-plugin-pickcolor-popup"></div>
       </div>
 <?php if( !empty( $description ) ): ?>
-        <div class="description-small"><?php echo $description; ?></div>
+        <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
-      </label>
     </div> <!-- <?php echo $var; ?> -->
 <script type="text/javascript">
 (function($){

@@ -9,10 +9,10 @@
 @>
     <div class="pde_form_field pde_form_password <?php echo $var; ?>">
       <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-        <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
+        <span class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
       <input type="password" value="<@php echo $<?php echo $var; ?>; ?>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>" />
 <?php if( !empty( $description ) ): ?>
-        <div class="description-small"><?php echo $description; ?></div>
+        <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
       </label>
     </div> <!-- <?php echo $var; ?> -->

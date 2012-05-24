@@ -9,7 +9,8 @@
 @>
     <div class="pde_form_field pde_form_date <?php echo $var; ?>">
       <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-      <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
+        <span class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+      </label>
       <div id="<@php echo $this->get_field_id('<?php echo $var; ?>_date_div'); @>"></div>
 <?php if( empty( $item->display_style ) || $item->display_style == 'inline' ) : ?>
       <input id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>" type="hidden" value="<@php echo $<?php echo $var; ?>; @>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>" />
@@ -17,9 +18,8 @@
       <input id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>" type="text" value="<@php echo $<?php echo $var; ?>; @>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>" />
 <?php endif; ?>
 <?php if( !empty( $description ) ): ?>
-        <div class="description-small"><?php echo $description; ?></div>
+        <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
-      </label>
     </div> <!-- <?php echo $var; ?> -->
 <script type="text/javascript">
 (function($) {

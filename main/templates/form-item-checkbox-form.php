@@ -13,9 +13,9 @@
            value="<?php echo $value; ?>"
            name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>"
            type="checkbox"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value; ?>'); @> />
-      <div class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></div>
+      <span class="pde_form_title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
 <?php if( !empty( $description ) ): ?>
-      <div class="description-small"><?php echo $description; ?></div>
+      <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
       </label>
     </div> <!-- <?php echo $var; ?> -->

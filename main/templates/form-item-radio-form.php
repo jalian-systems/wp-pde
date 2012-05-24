@@ -17,11 +17,11 @@
                name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
                type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', <?php _pv( $value );?>); @>
                value="<?php echo esc_attr($value);?>" />
-        <div class="pde_form_radio_option"><@php esc_html_e( __(<?php _pv( $value ); ?>) ); @></div>
+        <span class="pde_form_radio_option"><@php esc_html_e( __(<?php _pv( $value ); ?>) ); @></span>
       </label>
 <?php } ?>
 <?php if( !empty( $description ) ): ?>
-      <div class="description-small"><?php echo $description; ?></div>
+      <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
     </div> <!-- <?php echo $var; ?> -->
 <@php 
