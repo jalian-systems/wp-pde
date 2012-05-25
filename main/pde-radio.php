@@ -151,11 +151,10 @@ class PDE_Radio_Button {
         <input class="wp_pde_radio_button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
                name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
                type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value;?>'); @>
-               value="<?php echo esc_attr($value);?>" >
+               value="<?php echo esc_attr($value);?>" />
           <span class="pde_form_radio_option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
-        </input>
 <?php if( !empty( $description ) ): ?>
-        <div class="description-small"><?php echo $description; ?></div>
+        <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
       </label>
     </div> <!-- <?php echo $var; ?> -->
