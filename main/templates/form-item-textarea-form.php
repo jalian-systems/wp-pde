@@ -1,8 +1,7 @@
 <?php
   $var = $item->get_php_variable();
-  if( empty( $item->description_html_escape ) )
-    $description = $item->get_description() ;
-  else
+  $description = $item->get_description() ;
+  if( !empty( $description ) && !empty( $item->description_html_escape ) )
     $description = '<@php _e( \'' . esc_html( $item->get_description() ) . '\' ); @>' ;
   $rows = $item->get_rows_attr();
 ?>

@@ -1,9 +1,8 @@
 <?php
   $var = $item->get_php_variable();
   $value = esc_attr($item->get_value());
-  if( empty( $item->description_html_escape ) )
-    $description = $item->get_description() ;
-  else
+  $description = $item->get_description() ;
+  if( !empty( $description ) && !empty( $item->description_html_escape ) )
     $description = '<@php _e( \'' . esc_html( $item->get_description() ) . '\' ); @>' ;
 ?>
 @>
