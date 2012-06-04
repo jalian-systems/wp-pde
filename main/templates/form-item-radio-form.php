@@ -18,6 +18,10 @@
                value="<?php echo esc_attr($value);?>" />
         <span class="pde_form_radio_option"><@php esc_html_e( __(<?php _pv( $value ); ?>) ); @></span>
       </label>
+<?php if( !$single_line ) : ?>
+      <br/>
+<?php endif; ?>
+
 <?php } ?>
 <?php if( !empty( $description ) ): ?>
       <span class="description-small"><?php echo $description; ?></span>
