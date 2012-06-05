@@ -170,7 +170,7 @@ class PDE_Dropdown_Item {
       </select>
       <br />
 <?php if( !empty( $description ) ): ?>
-      <div class="description-small"><?php echo $description; ?></div>
+      <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
     </div> <!-- <?php echo $php_variable; ?> -->
   <@php 

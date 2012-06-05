@@ -58,7 +58,7 @@ echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $ar
                 );
     $instance = wp_parse_args( (array) $instance, $defaults);
     @>
-    <div id='<@php echo $this->get_field_id("wp_pde_form"); @>' class="pde_widget <?php echo $widget->get_theme_value(); ?>">
+    <div id='<@php echo $this->get_field_id("wp-pde-form"); @>' class="pde-widget <?php echo $widget->get_theme_value(); ?>">
     <@php
 <?php $args = array ('walker' => new Walker_form());
 echo Walker_PDE_Form::walk_tree($widget->get_form_field_items(), 0, (object) $args );

@@ -210,7 +210,7 @@ class Walker_form extends Walker_PDE_Form {
 ?>
 <script type="text/javascript">
 (function($) {
-  $('#<@php echo $this->get_field_id("wp_pde_form"); @>').on('change', '.wp_pde_checkbox', function (e) {
+  $('#<@php echo $this->get_field_id("wp-pde-form"); @>').on('change', '.wp-pde-checkbox', function (e) {
     item = $(e.target);
     group = '#group-' + $(item).attr('id');
     if($(group).size() > 0 && !$(group).hasClass('display_always')) {
