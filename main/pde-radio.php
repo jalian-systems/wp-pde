@@ -146,13 +146,13 @@ class PDE_Radio_Button {
     ob_start();
   ?>
   @>
-    <div class="pde_form_field pde_form_radio_button <?php echo $var; ?>">
+    <div class="pde-form-field pde-form-radio-button <?php echo $var; ?>">
       <label for="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); @>">
-        <input class="wp_pde_radio_button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
+        <input class="wp-pde-radio-button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
                name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
                type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value;?>'); @>
                value="<?php echo esc_attr($value);?>" />
-          <span class="pde_form_radio_option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
+          <span class="pde-form-radio-option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
 <?php if( !empty( $description ) ): ?>
         <span class="description-small"><?php echo $description; ?></span>
 <?php endif; ?>
@@ -177,7 +177,7 @@ class PDE_Radio_Button {
   <script type="text/javascript">
   (function($) {
     $(document).ready( function() {
-      $('#wpbody-content').on('change', '.wp_pde_radio_button', function (e) {
+      $('#wpbody-content').on('change', '.wp-pde-radio-button', function (e) {
         $.each( $('input[name="' + $(e.target).attr('name') + '"]'), function(index, item) {
           group = '#group-' + $(item).attr('id');
           if($(group).size() > 0 && !$(group).hasClass('display_always')) {
@@ -198,7 +198,7 @@ class PDE_Radio_Button {
   ?>
   <script type="text/javascript">
   (function($) {
-    $('.wp_pde_radio_button').trigger('change');
+    $('.wp-pde-radio-button').trigger('change');
   })(jQuery);
   </script>
   <?php

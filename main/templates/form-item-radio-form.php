@@ -8,15 +8,15 @@
 ?>
     $<?php echo $var; ?> = esc_textarea( $instance['<?php echo $var; ?>'] );
 ?>
-    <div class="pde_form_field pde_form_radio <?php echo $var; ?>">
-        <div class="pde_form_title"><@php esc_html_e( __(<?php echo _pv( $item->get_title() ); ?>) ); @></div>
+    <div class="pde-form-field pde-form-radio <?php echo $var; ?>">
+        <div class="pde-form-title"><@php esc_html_e( __(<?php echo _pv( $item->get_title() ); ?>) ); @></div>
 <?php foreach( $options as $key => $value ) { ?>
       <label for="<@php echo $this->get_field_id('<?php echo $key; ?>'); @>">
         <input id="<@php echo $this->get_field_id('<?php echo $key; ?>'); ?>"
                name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
                type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', <?php _pv( $value );?>); @>
                value="<?php echo esc_attr($value);?>" />
-        <span class="pde_form_radio_option"><@php esc_html_e( __(<?php _pv( $value ); ?>) ); @></span>
+        <span class="pde-form-radio-option"><@php esc_html_e( __(<?php _pv( $value ); ?>) ); @></span>
       </label>
 <?php if( !$single_line ) : ?>
       <br/>

@@ -160,8 +160,8 @@ class PDE_Dropdown_Item {
     ob_start();
   ?>
   @>
-    <div class="pde_form_field pde_form_dropdown_items <?php echo $php_variable; ?>">
-      <select class="wp_pde_dropdown_item widefat" name="<@php echo $this->get_field_name('<?php echo $php_variable; ?>'); @>" id="<@php echo $this->get_field_id('<?php echo $php_variable; ?>'); @>">
+    <div class="pde-form-field pde-form-dropdown-items <?php echo $php_variable; ?>">
+      <select class="wp-pde-dropdown-item widefat" name="<@php echo $this->get_field_name('<?php echo $php_variable; ?>'); @>" id="<@php echo $this->get_field_id('<?php echo $php_variable; ?>'); @>">
 <?php foreach( $values as $v ) {
 				$value = esc_attr($v);
         $esc_value = esc_html($v); ?>
@@ -192,7 +192,7 @@ class PDE_Dropdown_Item {
   <script type="text/javascript">
   (function($) {
     $(document).ready(function() {
-      $('#wpbody-content').on('change', '.wp_pde_dropdown_item', function (e) {
+      $('#wpbody-content').on('change', '.wp-pde-dropdown-item', function (e) {
         $(e.target).children('option').each( function (index, item) {
           group = '#group-' + $(item).attr('id');
           if($(group).size() > 0 && !$(group).hasClass('display_always')) {
@@ -213,7 +213,7 @@ class PDE_Dropdown_Item {
   ?>
   <script type="text/javascript">
   (function($) {
-    $('.wp_pde_dropdown_item').trigger('change');
+    $('.wp-pde-dropdown-item').trigger('change');
   })(jQuery);
   </script>
   <?php
