@@ -143,20 +143,45 @@ class PDE_Radio_Button {
       $description = $item->get_description() ;
     else
       $description = '<@php _e( \'' . esc_html( $item->get_description() ) . '\' ); @>' ;
+    $form = PDEForm::get( $item->form_id );
+    $all_items = $form->get_form_field_items();
+    $radio_label = '' ;
+    foreach( $all_items as $radio ) {
+      if( $radio->get_php_variable() == $var ) {
+        if( !isset( $walker->radio_labels ) || !in_array( $var, $walker->radio_labels ) )
+          if( isset( $radio->radio_group ) ) {
+            $radio_label = $radio->radio_group ;
+            if( !isset ( $walker->radio_labels ) )
+              $walker->radio_labels = array();
+            $walker->radio_labels[] = $var ;
+          }
+      }
+    }
     ob_start();
   ?>
   @>
     <div class="pde-form-field pde-form-radio-button <?php echo $var; ?>">
-      <label for="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); @>">
-        <input class="wp-pde-radio-button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
-               name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
-               type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value;?>'); @>
-               value="<?php echo esc_attr($value);?>" />
-          <span class="pde-form-radio-option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
+      <div class="pde-form-title">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><@php esc_html_e( __(<?php _pv( $radio_label ); ?>) ); @></span>
+        </label>
+      </div>
+      <div class="pde-form-input">
+        <label for="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); @>">
+          <input class="wp-pde-radio-button" id="<@php echo $this->get_field_id('<?php echo $field_id; ?>'); ?>"
+                 name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"
+                 type="radio"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value;?>'); @>
+                 value="<?php echo esc_attr($value);?>" />
+            <span class="pde-form-radio-option"><@php esc_html_e( __('<?php echo $title; ?>') ); @></span>
+        </label>
+      </div>
 <?php if( !empty( $description ) ): ?>
-        <span class="description-small"><?php echo $description; ?></span>
+      <div class="pde-form-description">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><?php echo $description; ?></span>
+        </label>
+      </div>
 <?php endif; ?>
-      </label>
     </div> <!-- <?php echo $var; ?> -->
   <@php 
   <?php

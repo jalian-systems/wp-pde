@@ -10,5 +10,7 @@
   }
 ?>
 @>
-      <div class="pde-form-field pde-form-label label-style-<?php echo $style; ?>"><?php echo $s_style; ?><@php _e( <?php _pv( $item->get_title() ); ?> ); ?><?php echo $e_style; ?></div>
+      <div class="pde-form-field pde-form-label label-style-<?php echo $style; ?>">
+        <?php echo $s_style; ?><@php _e( <?php _pv( $item->get_title() ); ?> ); ?><?php echo $e_style; ?>
+      </div>
 <@php 

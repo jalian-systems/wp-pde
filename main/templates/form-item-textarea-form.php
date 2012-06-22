@@ -8,12 +8,21 @@
     $<?php echo $var; ?> = esc_textarea( $instance['<?php echo $var; ?>'] );
 @>
     <div class="pde-form-field pde-form-textarea <?php echo $var; ?>">
-      <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-        <span class="pde-form-title"><@php esc_html_e( __(<?php echo _pv( $item->get_title() ); ?>) ); @></span>
+      <div class="pde-form-title">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+        </label>
+      </div>
+      <div class="pde-form-input">
         <textarea <?php echo $rows; ?> id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>"><@php echo $<?php echo $var; ?>; ?></textarea> 
+      </div>
 <?php if( !empty( $description ) ): ?>
-        <span class="description-small"><?php echo $description; ?></span>
+      <div class="pde-form-description">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><?php echo $description; ?></span>
+        </label>
+      </div>
 <?php endif; ?>
-      </label>
     </div> <!-- <?php echo $var; ?> -->
+
 <@php 

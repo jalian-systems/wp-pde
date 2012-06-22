@@ -147,8 +147,11 @@ class PDE_Dropdown_Item {
     $all_items = $form->get_form_field_items();
     $values = array();
     foreach( $all_items as $dropdown ) {
-      if( $dropdown->get_php_variable() == $php_variable )
+      if( $dropdown->get_php_variable() == $php_variable ) {
         $values[] = $dropdown->get_value();
+        if( !isset( $dropdown_label ) && isset ( $dropdown->dropdown_group ) )
+          $dropdown_label = $dropdown->dropdown_group ;
+      }
     }
 
     $title = $item->get_title();
@@ -161,16 +164,26 @@ class PDE_Dropdown_Item {
   ?>
   @>
     <div class="pde-form-field pde-form-dropdown-items <?php echo $php_variable; ?>">
-      <select class="wp-pde-dropdown-item widefat" name="<@php echo $this->get_field_name('<?php echo $php_variable; ?>'); @>" id="<@php echo $this->get_field_id('<?php echo $php_variable; ?>'); @>">
-<?php foreach( $values as $v ) {
-				$value = esc_attr($v);
-        $esc_value = esc_html($v); ?>
-        <option id='<@php echo \$this->get_field_id( '<?php echo sanitize_html_class( $v ); ?>' ); @>' value="<?php echo $value; ?>"<@php selected( $instance['<?php echo $php_variable; ?>'], '<?php echo $value; ?>' ); @>><@php _e('<?php echo $esc_value; ?>'); @></option>
-<?php } ?>
-      </select>
-      <br />
+      <div class="pde-form-title">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><@php esc_html_e( __(<?php _pv( $dropdown_label ); ?>) ); @></span>
+        </label>
+      </div>
+      <div class="pde-form-input">
+        <select class="wp-pde-dropdown-item widefat" name="<@php echo $this->get_field_name('<?php echo $php_variable; ?>'); @>" id="<@php echo $this->get_field_id('<?php echo $php_variable; ?>'); @>">
+  <?php foreach( $values as $v ) {
+          $value = esc_attr($v);
+          $esc_value = esc_html($v); ?>
+          <option id='<@php echo \$this->get_field_id( '<?php echo sanitize_html_class( $v ); ?>' ); @>' value="<?php echo $value; ?>"<@php selected( $instance['<?php echo $php_variable; ?>'], '<?php echo $value; ?>' ); @>><@php _e('<?php echo $esc_value; ?>'); @></option>
+  <?php } ?>
+        </select>
+      </div>
 <?php if( !empty( $description ) ): ?>
-      <span class="description-small"><?php echo $description; ?></span>
+      <div class="pde-form-description">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><?php echo $description; ?></span>
+        </label>
+      </div>
 <?php endif; ?>
     </div> <!-- <?php echo $php_variable; ?> -->
   <@php 

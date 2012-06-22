@@ -98,6 +98,10 @@ class PDEFormItem {
     return isset( $this->description ) ? $this->description : '' ;
   }
 
+  function get_label() {
+    return isset( $this->cb_label ) ? $this->cb_label : '' ;
+  }
+
   function get_php_variable() {
     if (! empty($this->php_variable))
       return $this->php_variable ;

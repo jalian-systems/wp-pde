@@ -20,7 +20,6 @@ class PDE_Date_Picker {
     <label for="edit-form-item-default-value-<?php echo $item->db_id; ?>">
       <?php _e( 'Default Value' ); ?><br />
       <input type="text" id="edit-form-item-default-value-<?php echo $item->db_id; ?>" class="widefat edit-form-item-default-value" name="db-<?php echo $item->db_id; ?>[default_value]" value="<?php echo esc_attr( isset( $item->default_value ) ? $item->default_value : '' ); ?>" />
-      <span class="description-small"><?php echo __('Default value in #XXXXXX format'); ?></span>
     </label>
   </p>
 

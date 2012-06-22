@@ -7,8 +7,15 @@
 </p>
 <p class="description description-thin">
   <label for="edit-form-item-default-value-<?php echo $item_id; ?>">
-    <?php _e( 'Default Value' ); ?><br />
-    <input type="text" id="edit-form-item-default-value-<?php echo $item_id; ?>" class="widefat edit-form-item-default-value" name="db-<?php echo $item_id; ?>[default_value]" value="<?php echo esc_attr( isset( $item->default_value ) ? $item->default_value : '' ); ?>" />
+    <?php _e( '' ); ?><br />
+    <input type="checkbox" id="edit-form-item-default-value-<?php echo $item_id; ?>" class="edit-form-item-default-value" name="db-<?php echo $item_id; ?>[default_value]"<?php checked( isset( $item->default_value ) ? $item->default_value : '', $item->title ); ?> value="<?php echo esc_attr( $item->title ); ?>" />
+    <?php _e( 'Initially Selected' ); ?>
+  </label>
+</p>
+<p class="description description-wide">
+  <label for="edit-form-item-cb-label-<?php echo $item_id; ?>">
+    <?php _e( 'Checkbox Label' ); ?><br />
+    <input type="text" id="edit-form-item-cb-label-<?php echo $item_id; ?>" class="widefat code edit-form-item-cb-label" name="db-<?php echo $item_id; ?>[cb_label]" value="<?php echo esc_attr( isset( $item->cb_label ) ? $item->cb_label : '' ); ?>" />
   </label>
 </p>
 <p class="field-value description description-wide">

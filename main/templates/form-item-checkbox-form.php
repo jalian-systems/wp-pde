@@ -7,15 +7,25 @@
 ?>
 @>
     <div class="pde-form-field pde-form-checkbox <?php echo $var; ?>">
-      <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-        <input class="wp-pde-checkbox" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>"
-           value="<?php echo $value; ?>"
-           name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>"
-           type="checkbox"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value; ?>'); @> />
-      <span class="pde-form-title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+        <div class="pde-form-title">
+          <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+            <span><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+          </label>
+        </div>
+        <div class="pde-form-input">
+          <input class="wp-pde-checkbox" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>"
+            value="<?php echo $value; ?>"
+            name="<@php echo $this->get_field_name('<?php echo $var; ?>'); @>"
+            type="checkbox"<@php checked(isset($instance['<?php echo $var; ?>']) ? $instance['<?php echo $var; ?>'] : '', '<?php echo $value; ?>'); @> />
+          <span class="pde-form-cb-label"><@php esc_html_e( __(<?php _pv( $item->get_label() ); ?>) ); @></span>
+        </div>
 <?php if( !empty( $description ) ): ?>
-      <span class="description-small"><?php echo $description; ?></span>
+        <div class="pde-form-description">
+          <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+            <span><?php echo $description; ?></span>
+          </label>
+        </div>
 <?php endif; ?>
-      </label>
     </div> <!-- <?php echo $var; ?> -->
+
 <@php 

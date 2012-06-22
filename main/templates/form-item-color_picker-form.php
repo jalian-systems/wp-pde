@@ -7,17 +7,23 @@
     $<?php echo $var; ?> = esc_attr( $instance['<?php echo $var; ?>'] );
 @>
     <div class="pde-form-field pde-form-text <?php echo $var; ?>">
-      <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
-      <span class="pde-form-title"><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
-      </label>
-      <div class="color-picker-div">
+      <div class="pde-form-title">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><@php esc_html_e( __(<?php _pv( $item->get_title() ); ?>) ); @></span>
+        </label>
+      </div>
+      <div class="pde-form-input">
         <input type="text" value="<@php echo $<?php echo $var; ?>; ?>" name="<@php echo $this->get_field_name('<?php echo $var; ?>'); ?>" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>" class="pde-plugin-pickcolor-text"/>
-        <a href="#" class="pde-plugin-pickcolor-example hide-if-no-js" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-example"></a>
+        <a style="-moz-border-radius: 4px;-webkit-border-radius: 4px;border-radius: 4px;border: 1px solid #dfdfdf;margin: 0 7px 0 3px;padding: 4px 14px;display: inline;" href="#" class="pde-plugin-pickcolor-example hide-if-no-js" id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-example"></a>
         <input id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-button" type="button" class="pde-plugin-pickcolor button hide-if-no-js" value="<?php esc_attr_e( 'Select' ); ?>" />
         <div id="<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-colorPickerDiv" class="pde-plugin-pickcolor-popup"></div>
       </div>
 <?php if( !empty( $description ) ): ?>
-        <span class="description-small"><?php echo $description; ?></span>
+      <div class="pde-form-description">
+        <label for="<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>">
+          <span><?php echo $description; ?></span>
+        </label>
+      </div>
 <?php endif; ?>
     </div> <!-- <?php echo $var; ?> -->
 <script type="text/javascript">
