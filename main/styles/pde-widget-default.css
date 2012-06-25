@@ -1,5 +1,29 @@
 /*
  * Default style for widgets
 */
+.pde-widget-default .pde-form-field {
+  margin-bottom: 10px;
+}
 
-@import url(/wp-content/uploads/pde-widget-default.css);
+.pde-widget-default .pde-form-field .pde-form-title label span:after {
+  content: ':' ;
+}
+
+.pde-widget-default .pde-form-field .pde-form-title label span:empty:after {
+  content: '' ;
+}
+
+.pde-widget-default .pde-form-field input[type="text"],
+.pde-widget-default .pde-form-field input[type="password"],
+.pde-widget-default .pde-form-field select,
+.pde-widget-default .pde-form-field textarea {
+  width: 100%;
+}
+
+.pde-widget-default .pde-form-field .pde-form-description {
+  font-style: italic ;
+}
+
+.pde-widget-default .pde-form-field .pde-form-input input.pde-plugin-pickcolor-text {
+  width: 80px ;
+}
