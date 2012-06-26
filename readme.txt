@@ -4,7 +4,7 @@ Donate link: http://wp-pde.jaliansystems.com
 Tags: widgets, pde, development environment, actions, hooks, types, menu pages, metaboxes
 Requires at least: 3.3
 Tested up to: 3.3.1
-Stable tag: 0.9.3
+Stable tag: 0.9.4
 
 A development environment for creating plugins with support for widgets, actions and hooks.
 
@@ -89,6 +89,14 @@ You can change the editor options using the `Editor Options` box.
 4. The editor
 
 == Changelog ==
+
+= 0.9.4 =
+
+1. Added plugin selection for exporting a plugin project.
+2. BugFix: shortcode (<?php) in pde-form-walker.php
+3. Added delay_for_export() for post/page/metabox creation for making export work properly.
+4. Markup is structured better.
+5. Updated default styles for widget.
 
 = 0.9.3 =
 
