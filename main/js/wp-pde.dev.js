@@ -82,10 +82,6 @@ var wpPDEPlugin;
       if ($('#editorcontent').size() == 0)
         return;
 			height = $('#templateside').height();
-			if (height > 720)
-				$('#editorcontent').height(height);
-			else
-				$('#editorcontent').height(720);
 
       if (api.aceEditor != undefined) {
         api.aceEditor.getSession().removeAllListeners();
@@ -103,7 +99,7 @@ var wpPDEPlugin;
 			api.aceEditor.setReadOnly(readonly);
 			if (readonly)
 				$('#save-file').attr('disabled', 'disabled');
-      var command = {
+      var cmd_save = {
           name: "save-file",
           bindKey: {
               mac: "Command-S",
@@ -112,8 +108,26 @@ var wpPDEPlugin;
           called: false,
           exec: function(editor) { $('#save-file').click(); }
       };
+      api.aceEditor.commands.addCommand(cmd_save);
 
-      api.aceEditor.commands.addCommand(command);
+      var cmd_fullscreen = {
+          name: "full-screen",
+          bindKey: {
+              mac: "Command-Return",
+              win: "Ctrl-Return",
+          },
+          readOnly: true,
+          called: false,
+          exec: function(editor) {
+                                   $('body').toggleClass("fullScreen");
+                                   $('#post-body').toggleClass("fullScreen-editor");
+                                   $('#editorcontent').toggleClass("fullScreen-editor");
+                                   editor.resize(); 
+                                  }
+
+      } ;
+      api.aceEditor.commands.addCommand(cmd_fullscreen);
+
       this.attachTextAreaChangeListeners();
 
     },

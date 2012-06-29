@@ -458,12 +458,12 @@ if (isset($_plugin_object)) {
 
 					<div id="pde-plugin-footer">
 						<div class="major-publishing-actions">
-						<div class="publishing-action">
-              <span class="update-file-contents">
-                <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
-                <?php submit_button( __( 'Save' ), 'primary', 'save-file', false, array( 'tabindex' => '2' ) ); ?>
-              </span>
-						</div>
+						  <div class="publishing-action">
+                <span class="update-file-contents">
+                  <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
+                  <?php submit_button( __( 'Save' ), 'primary', 'save-file', false, array( 'tabindex' => '2' ) ); ?>
+                </span>
+						  </div>
 						</div>
 					</div><!-- /#pde-plugin-footer -->
 				</form><!-- /#update-pde-plugin -->
