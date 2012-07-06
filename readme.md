@@ -110,6 +110,15 @@ You can change the editor options using the `Editor Options` box.
 
 ## Changelog
 
+## 0.9.4
+
+* Added plugin selection for exporting a plugin project.
+* BugFix: shortcode (<?php) in pde-form-walker.php
+* Added delay_for_export() for post/page/metabox creation for making export work properly.
+* Markup is structured better.
+* Updated default styles for widget.
+* Full screen editor support (use Command/Control+Enter to switch the editor mode)
+
 ### 0.9.3
 
 * Compatibility changes for Wordpress 3.4 beta 2
