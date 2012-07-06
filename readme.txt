@@ -97,6 +97,7 @@ You can change the editor options using the `Editor Options` box.
 3. Added delay_for_export() for post/page/metabox creation for making export work properly.
 4. Markup is structured better.
 5. Updated default styles for widget.
+6. Full screen editor support (use Command/Control+Enter to switch the editor mode)
 
 = 0.9.3 =
 
