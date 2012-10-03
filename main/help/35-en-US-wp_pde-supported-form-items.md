@@ -49,6 +49,12 @@ WpPDE supports the following type of form items.
 
     Displays a date picker field using `jquery-ui-datepicker`.
 
+* **Action Button**
+
+    Adds a action button to your form. `Menu Pages` (and `Meta boxes` included into them) support action buttons automatically. For
+    `Widgets` and post/page `Meta Boxes` - you need to hook them up by using javascript (may be in a `Markup` item) and `wp_ajax`
+    or `wp_ajax_nopriv` hooks.
+
 <font color="red">(WpPDE Pro)</font>
 
 In addition to the above fields, The WpPDE Pro add-on supports the following form items:
@@ -68,4 +74,12 @@ In addition to the above fields, The WpPDE Pro add-on supports the following for
 * **Images**
 
     Uses WordPress media uploader and allows to upload one or more images.
+
+* **Tab Items**
+
+    Using jquery-ui-tabs provides a tabbed pane.
+
+* **Accordion**
+
+    Using jquery-ui-accordion provides an accordion.
 

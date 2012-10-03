@@ -40,24 +40,41 @@ switch ( $action ) {
   case 'update-options':
 		global $current_user;
 		check_admin_referer( 'update-options-' . $current_user->user_login);
+		update_user_meta( $current_user->ID, 'wp_pde_ta_save_on_change', $_REQUEST['ta-editor-save-on-change']);
 		update_user_meta( $current_user->ID, 'wp_pde_editor', $_REQUEST['editor-option']);
 		update_user_meta( $current_user->ID, 'wp_pde_ace_theme', $_REQUEST['ace-editor-theme']);
 		update_user_meta( $current_user->ID, 'wp_pde_ace_display_gutter', $_REQUEST['ace-editor-display-gutter']);
+		update_user_meta( $current_user->ID, 'wp_pde_ace_key_binding', $_REQUEST['ace-editor-key-binding']);
 		update_user_meta( $current_user->ID, 'wp_pde_ace_font_size', $_REQUEST['ace-editor-font-size']);
 		update_user_meta( $current_user->ID, 'wp_pde_ace_print_margin', $_REQUEST['ace-editor-print-margin']);
 		update_user_meta( $current_user->ID, 'wp_pde_ace_wrap_mode', $_REQUEST['ace-editor-wrap-mode']);
+		update_user_meta( $current_user->ID, 'wp_pde_ace_indent_guides', $_REQUEST['ace-editor-indent-guides']);
     break ;
 
   case 'add-file':
+  case 'add-file-new':
 		check_admin_referer( 'add-pdeplugin-file-' . $pde_plugin_selected_id );
     $_plugin_object = PDEPlugin::get( $pde_plugin_selected_id );
     if( !is_wp_error( $_plugin_object ) ) {
-      foreach( $_FILES as $key => $file_entry ) {
-        if( $file_entry['error'] ) {
+      if( $action == 'add-file' ) {
+        foreach( $_FILES as $key => $file_entry ) {
+          if( $file_entry['error'] ) {
+          } else {
+            $path = empty( $_REQUEST['file_path'] ) ? '' : $_REQUEST['file_path'] . '/' ;
+            $filename = $path . basename($file_entry['name']) ;
+            $item = $_plugin_object->create_external_file($filename, file_get_contents( $file_entry['tmp_name'] ) );
+            if( is_wp_error( $item ) )
+              WpPDEPlugin::messages('error', $item->get_error_message(), $messages);
+          }
+        }
+      } else {
+        $path = empty( $_REQUEST['file_path_new'] ) ? '' : $_REQUEST['file_path_new'] . '/' ;
+        $filename = empty( $_REQUEST['file_name'] ) ? '' : $_REQUEST['file_name'] ;
+        if( empty( $filename ) ) {
+          WpPDEPlugin::messages('error', 'File name can not be empty', $messages);
         } else {
-          $path = empty( $_REQUEST['file_path'] ) ? '' : $_REQUEST['file_path'] ;
-          $filename = $path . '/' . basename($file_entry['name']) ;
-          $item = $_plugin_object->create_external_file($filename, file_get_contents( $file_entry['tmp_name'] ) );
+          $filename = $path . $filename ;
+          $item = $_plugin_object->create_external_file($filename, '' ) ;
           if( is_wp_error( $item ) )
             WpPDEPlugin::messages('error', $item->get_error_message(), $messages);
         }
@@ -149,10 +166,9 @@ switch ( $action ) {
         $_plugin_object = PDEPlugin::get( $pde_plugin_selected_id );
         $plugin_test = ! $_plugin_object->get_option('test');
         $_plugin_object->update_option( 'test', $plugin_test);
-        WpPDEPlugin::messages('updated fade', sprintf(__('The plugin has been %s.'), $plugin_test ? 'enabled' : 'disabled'), $messages);
+        wp_redirect( add_query_arg( array( 'test_plugin' => false) ) );
+        die(0);
       }
-    } else if( isset( $_REQUEST['export_plugin'] ) )  {
-        WpPDEPlugin::messages('error', __( 'Not yet implemented'), $messages);
     } else {
       // Add Plugin
       if ( 0 == $pde_plugin_selected_id ) {
@@ -294,7 +310,10 @@ if (isset($_plugin_object)) {
 
 ?>
 <div class="wrap">
+  <div>
   <img src="<?php echo plugins_url('images/wppdelogo.png', __FILE__); ?>" height="62" width="166"/>
+  <h4 style="float:right;">Version: <?php echo WpPDEPlugin::get_version(); ?></h4> 
+  </div>
 
   <?php foreach ($messages as $message ) echo $message ; ?>
 
@@ -304,6 +323,7 @@ if (isset($_plugin_object)) {
 	<div id="plugin-settings-column" class="metabox-holder<?php if ( !$pde_plugin_selected_id ) { echo ' metabox-holder-disabled'; } ?>">
 
       <?php PDEPlugin::go_pro(); ?>
+      <?php PDEPlugin::support_us(); ?>
 			<?php do_meta_boxes( null, 'side', array ('plugin' => isset ( $_plugin_object ) ? $_plugin_object : null, 'file_id' => $editor_current_file) ); ?>
 
 	</div><!-- /#plugin-settings-column -->
@@ -456,6 +476,7 @@ if (isset($_plugin_object)) {
 
 					</div><!-- /#post-body -->
 
+					<div class="clear">&nbsp;</div>
 					<div id="pde-plugin-footer">
 						<div class="major-publishing-actions">
 						  <div class="publishing-action">

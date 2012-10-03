@@ -75,8 +75,23 @@ var wpPDEPlugin;
     attachEditorSelectionListeners: function() {
       $('#editor-option').change(function (e) {
         $('#ace-editor-options').css('display', $(e.target).val() == 'Ace' ? 'block' : 'none')
+        $('#ta-editor-options').css('display', $(e.target).val() != 'Ace' ? 'block' : 'none')
       });
     },
+
+		savePlugin: function() {
+          params = {
+            'action': 'save-plugin',
+            'plugin_id': $('#plugin').val(),
+          };
+
+          $.post( ajaxurl, params, function(response, sstatus) {
+              $('#message-area').html($('#message-area').html() + '<div class="updated fade">Plugin saved.</div>');
+					})
+            .error(function(response) {
+              $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+            });
+		},
 
     setAceEditor : function(ace_mode) {
       if ($('#editorcontent').size() == 0)
@@ -91,9 +106,14 @@ var wpPDEPlugin;
       var PHPMode = ace.require("ace/mode/" + ace_mode).Mode;
       api.aceEditor.getSession().setMode(new PHPMode());
       api.aceEditor.setShowPrintMargin(wpPDEPluginVar.ace_print_margin == 'Yes');
+      api.aceEditor.setDisplayIndentGuides(wpPDEPluginVar.ace_indent_guides == 'Yes');
       api.aceEditor.getSession().setUseWrapMode(wpPDEPluginVar.ace_wrap_mode == 'Yes');
       if (wpPDEPluginVar.ace_display_gutter == 'No')
         $('div.ace_gutter').css('display', 'none');
+	  if(wpPDEPluginVar.ace_key_binding != 'ace') {
+	  	keybinding = ace.require('ace/keyboard/' + wpPDEPluginVar.ace_key_binding).handler ;
+		api.aceEditor.setKeyboardHandler(keybinding);
+	  }
       $('#editorcontent').css('font-size', wpPDEPluginVar.ace_font_size);
 			readonly = $('#editor-mode').val() == 'readonly';
 			api.aceEditor.setReadOnly(readonly);
@@ -109,6 +129,17 @@ var wpPDEPlugin;
           exec: function(editor) { $('#save-file').click(); }
       };
       api.aceEditor.commands.addCommand(cmd_save);
+
+      var cmd_save_plugin = {
+          name: "save-plugin",
+          bindKey: {
+              mac: "Command-B",
+              win: "Ctrl-B"
+          },
+          called: false,
+          exec: function(editor) { api.savePlugin(); }
+      };
+      api.aceEditor.commands.addCommand(cmd_save_plugin);
 
       var cmd_fullscreen = {
           name: "full-screen",
@@ -127,9 +158,6 @@ var wpPDEPlugin;
 
       } ;
       api.aceEditor.commands.addCommand(cmd_fullscreen);
-
-      this.attachTextAreaChangeListeners();
-
     },
 
     attachFormAreaChangeListeners: function() {
@@ -147,6 +175,9 @@ var wpPDEPlugin;
       } else {
         $('#editorcontent').change(function (e) {
           api.registerEditorChange(true);
+          if(wpPDEPluginVar.ta_save_on_change === 'Yes') {
+            $('#save-file').click();
+          }
         });
       }
 			$('#update-pde-plugin').unbind('submit');
@@ -229,15 +260,19 @@ var wpPDEPlugin;
             if (response['error'] != 'error')
               $('#templateside li.highlight a.edit-file-link').click();
             api.messageClean = true ;
-          }, 'json');
+          }, 'json')
+            .error(function(response) {
+              $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+            });
         });
     },
 
     setEditorContents: function(data, mode, ace_mode) {
       $('#editor-area').css('display', 'block');
-      if (api.aceEditor == undefined)
+      if (api.aceEditor == undefined) {
         $('#editortemplate #editorcontent').val(data);
-      else {
+        $('#editortemplate #editorcontent').attr('itsalltext_extension', '.' + ace_mode);
+			} else {
         api.setAceEditor(ace_mode);
         api.aceEditor.getSession().setValue(data);
         api.registerEditorChange(false);
@@ -247,6 +282,7 @@ var wpPDEPlugin;
 				else
 					$('#save-file').removeAttr('disabled');
       }
+      api.attachTextAreaChangeListeners();
     },
 
     getEditorContents: function() {
@@ -321,7 +357,10 @@ var wpPDEPlugin;
             $('#message-area').html(response['message']);
           else
             $('#message-area').html($('#message-area').html() + response['message']);
-        }, 'json');
+        }, 'json')
+          .error(function(response) {
+            $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+          });
       });
 
       $('li.edit-file-link a.delete-file-link').unbind ('click');
@@ -379,7 +418,10 @@ var wpPDEPlugin;
         api.registerEditorChange(false);
 			  $('.update-file-contents img.waiting').hide();
         $('#message-area').html(response['message']);
-      }, 'json');
+      }, 'json')
+        .error(function(response) {
+          $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+        });
     },
 
 		jQueryExtensions : function() {
@@ -797,7 +839,10 @@ var wpPDEPlugin;
 					  ins.addClass('plugin-instructions-inactive');
         }
 				callback();
-			}, 'json');
+			}, 'json')
+        .error(function(response) {
+          $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+        });
 		},
 
 		/**
@@ -1048,7 +1093,10 @@ var wpPDEPlugin;
             });
         }
         $('#message-area').html(response['message']);
-      }, 'json');
+      }, 'json')
+        .error(function(response) {
+          $('#message-area').html($('#message-area').html() + '<div class="error">' + response['responseText'] + '</div>');
+        });
 		},
 
 		depthToPx : function(depth) {
@@ -1065,9 +1113,14 @@ var wpPDEPlugin;
     if (wpPDEPluginVar.editor == 'Ace') {
       api.setAceEditor('php');
     }
+    api.attachTextAreaChangeListeners();
     $('#editorcontent').css('display', 'block');
     wpPDEPlugin.init();
     $('#templateside li.highlight a.edit-file-link').click();
+	$('select').each(function() {
+		$(this).css('display', 'none');
+		$(this).select2();
+	});
   });
 
 })(jQuery);

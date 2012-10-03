@@ -229,7 +229,9 @@ class Walker_form extends Walker_PDE_Form {
 ?>
 <script type="text/javascript">
 (function($) {
-  $('.wp_pde_checkbox').trigger('change');
+  $(document).ready(function(e) {
+    $('.wp-pde-checkbox').trigger('change');
+  });
 })(jQuery);
 </script>
 <?php

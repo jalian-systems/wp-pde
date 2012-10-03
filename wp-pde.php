@@ -3,7 +3,7 @@
 Plugin Name: WpPDE
 Plugin URI: http://wp-pde.jaliansystems.com
 Description: Plugin development environment for Wordpress
-Version: 0.9.4
+Version: 1.0
 Author: Dakshinamurthy Karra
 Author URI: http://wp-pde.jaliansystems.com
 License: GPL2
@@ -27,6 +27,12 @@ License: GPL2
 define ('WP_PDE_PATH', dirname(__FILE__) . '/');
 
 require_once WP_PDE_PATH . 'main/pde-plugin.php';
+require_once WP_PDE_PATH . 'instrument-hooks.php';
+
+if(!function_exists('fb')) {
+	include_once( "main/FirePHPCore/lib/FirePHPCore/FirePHP.class.php");
+	include_once( "main/FirePHPCore/lib/FirePHPCore/fb.php");
+}
 
 /**
  * The WpPDE plugin.
@@ -34,6 +40,11 @@ require_once WP_PDE_PATH . 'main/pde-plugin.php';
  * Initialize the plugin and attach the WpPDE page
 */
 class WpPDEPlugin {
+
+  static function get_version() {
+    $d = get_plugin_data( __FILE__ );
+    return $d['Version'] ;
+  }
 
   /**
    * Extract the required parameters or die.
@@ -57,11 +68,15 @@ class WpPDEPlugin {
    * Hook for admin_init: register our scripts and styles
    */
   static function admin_init(){
-    wp_register_script('wp-pde', plugins_url( 'main/js/wp-pde.dev.js', __FILE__), array('jquery-ui-sortable'));
-    wp_register_script('ace_0.2', plugins_url( 'main/js/ace-0.2/ace-noconflict.js', __FILE__));
-    wp_register_script('ace_0.2-mode-php', plugins_url( 'main/js/ace-0.2/mode-php-noconflict.js', __FILE__));
-    wp_register_script('ace_0.2-mode-markdown', plugins_url( 'main/js/ace-0.2/mode-markdown-noconflict.js', __FILE__));
+    wp_register_script('wp-pde', plugins_url( 'main/js/wp-pde.dev.js', __FILE__), array('jquery-ui-sortable', 'select2'));
+    wp_register_script('select2', plugins_url( 'main/js/select2/select2.min.js', __FILE__), array('jquery'));
+    wp_register_script('ace_0.2', plugins_url( 'main/js/ace-builds/src-min-noconflict/ace.js', __FILE__));
+    wp_register_script('ace_0.2-mode-php', plugins_url( 'main/js/ace-builds/src-min-noconflict/mode-php.js', __FILE__));
+    wp_register_script('ace_0.2-mode-markdown', plugins_url( 'main/js/ace-builds/src-min-noconflict/mode-markdown.js', __FILE__));
+    wp_register_script('ace_0.2-keybinding-emacs', plugins_url( 'main/js/ace-builds/src-min-noconflict/keybinding-emacs.js', __FILE__));
+    wp_register_script('ace_0.2-keybinding-vim', plugins_url( 'main/js/ace-builds/src-min-noconflict/keybinding-vim.js', __FILE__));
     wp_register_style('wp-pde', plugins_url( 'main/css/wp-pde.dev.css', __FILE__));
+    wp_register_style('select2', plugins_url( 'main/js/select2/select2.css', __FILE__));
     wp_register_style('wp-pde-colors', plugins_url( 'main/css/colors.dev.css', __FILE__));
   }
 
@@ -191,7 +206,7 @@ class WpPDEPlugin {
     }
 
     global $pde_plugin_selected_id;
-    $pde_plugin_selected_id = $args['plugin_id'];
+    $pde_plugin_selected_id = (int) $args['plugin_id'];
 
     $r = $plugin->_emit_editor_actions($args['pluginitem_type'], $action_item->db_id);
     WpPDEPlugin::json_die(!empty($r) ? 'success' : 'error', $messages, $r);
@@ -378,6 +393,27 @@ class WpPDEPlugin {
 
   }
 
+  static function ajax_save_plugin() {
+    if ( ! is_super_admin() )
+      WpPDEPlugin::json_die('error', WpPDEPlugin::messages('error', "You don't have permissions to do that :("), '');
+
+    if ( get_magic_quotes_gpc() ) {
+      $_REQUEST   = array_map( 'stripslashes_deep', $_REQUEST );
+    }
+
+    $messages = array();
+    $args = WpPDEPlugin::ajax_params(array ('plugin_id'), $_REQUEST, $messages) ;
+    
+    if (!$args)
+      WpPDEPlugin::json_die('error', $messages, '');
+
+    global $pde_plugin_selected_id;
+    $pde_plugin_selected_id = (int) $args['plugin_id'];
+    $_plugin_object = PDEPlugin::get($pde_plugin_selected_id);
+    $_plugin_object->create_project($messages);
+    WpPDEPlugin::json_die('success', $messages, '');
+  }
+
   static function json_die($error, $messages, $data, $extra = array()) {
     $message = implode("\n", $messages);
     $r = array_merge(array('error' => $error, 'message' => $message, 'data' => !$data ? '' : $data), $extra);
@@ -432,6 +468,13 @@ class WpPDEPlugin {
     return $order;
   }
 
+  static function fb_init() {
+	ob_start();
+  }
+
+  static function fb_shut() {
+	ob_get_clean();
+  }
 }
 
 function _pv( $string, $return = false ) {
@@ -448,6 +491,13 @@ function delay_for_export( ) {
    */
   sleep( 1 );
 }
+
+function pde_fb($v) {
+	fb($v);
+}
+
+global $pde_firephp ;
+$pde_firephp = FirePHP::getInstance(true);
 
 WpPDEPlugin::register_ww_types();
 PDEPlugin::load_test_plugins();
@@ -471,4 +521,9 @@ add_filter('get_user_option_metaboxhidden_toplevel_page_wp_pde', array('WpPDEPlu
 add_filter('get_user_option_meta-box-order_toplevel_page_wp_pde', array('WpPDEPlugin', 'get_metabox_order'), 10, 2);
 
 do_action( 'pde_plugin_loaded', '' );
+
+add_action('wp_ajax_save-plugin', array('WpPDEPlugin', 'ajax_save_plugin'));
+add_action('init', array('WpPDEPlugin', 'fb_init'));
+add_action('admin_init', array('WpPDEPlugin', 'fb_init'));
+add_action('shutdown', array('WpPDEPlugin', 'fb_shut'), 20);
 ?>

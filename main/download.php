@@ -40,8 +40,6 @@ function Zip($source, $destination, $prefix='') {
 
 $plugin = PDEPlugin::get( $_REQUEST['plugin_id'] );
 $filename = $plugin->plugin_name;
-if( !empty($plugin->plugin_version) )
-  $filename .= '-' . $plugin->plugin_version;
 $prefix = strtolower( sanitize_file_name( $filename ) );
 $filename = $prefix . '.zip';
 

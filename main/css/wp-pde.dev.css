@@ -9,11 +9,11 @@
 .toplevel_page_wp_pde #post-body {
   padding:0 !important;
   min-height: 720px;
+  border-bottom-color: #ffffff;
 }
 
 .toplevel_page_wp_pde #post-body-content {
   width: auto;
-	margin-right: 200px;
 }
 
 .toplevel_page_wp_pde #editor-area {
@@ -241,10 +241,6 @@
 
 .toplevel_page_wp_pde #pde-plugin-header {
     border-bottom: 1px solid;
-}
-
-.toplevel_page_wp_pde #pde-plugin-footer {
-    border-top: 1px solid;
 }
 
 .toplevel_page_wp_pde #post-body div.updated,
@@ -788,4 +784,12 @@ z-index: 100000
 
 .fullScreen {
   overflow: hidden
+}
+
+.select2-results li {
+	margin-bottom: 0;
+}
+
+.metabox-normal-description {
+  font-style: italic;
 }

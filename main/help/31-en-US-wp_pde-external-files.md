@@ -9,6 +9,9 @@ The changes made to the file using PDE's editor, do not reflect in the original 
 If you want to replace an external file in the plugin, delete the file from the PDE
 project and add it again using the above instructions.
 
+You can also add new empty files to your plugin. Use the `Folder` and `File Name` text
+fields below in the same meta box.
+
 #### Including the files
 
 When you upload either a javascript, php or a css file - you can let PDE include them

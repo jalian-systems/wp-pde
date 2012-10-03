@@ -23,4 +23,20 @@
     <?php _e( 'Markup' ); ?><br />
     <textarea id="edit-form-item-markup-<?php echo $item_id; ?>" class="widefat edit-form-item-markup" rows="5" cols="20" name="db-<?php echo $item_id; ?>[markup]"><?php echo esc_html( isset( $item->markup ) ? $item->markup : '' ); // textarea_escaped ?></textarea>
   </label>
+
+<p class="field-value description description-wide">
+  <label for="edit-form-item-raw-markup-<?php echo $item->db_id; ?>">
+    <input type="checkbox" id="edit-form-item-raw-markup-<?php echo $item->db_id; ?>" value="raw_markup" name="db-<?php echo $item->db_id; ?>[raw_markup]"<?php checked( isset( $item->raw_markup ) ? $item->raw_markup : '', 'raw_markup' ); ?> />
+    <?php _e( 'Raw markup (will be copied as is)' ); ?>
+  </label>
+</p>
+
+<p class="field-php-variable description description-wide">
+  <label for="edit-form-item-php-variable-<?php echo $item_id; ?>">
+    <?php _e( 'Script Variable' ); ?><br />
+    <input type="text" id="edit-form-item-php-variable-<?php echo $item_id; ?>" class="widefat code edit-form-item-php-variable" name="db-<?php echo $item_id; ?>[php_variable]" value="<?php echo esc_attr( isset( $item->php_variable ) ? $item->php_variable : '' ); ?>" />
+    <span class="description-small"><?php echo sprintf(__('Currently using: $%s'), $item->get_php_variable()); ?></span>
+  </label>
+</p>
+
 </p>

@@ -29,6 +29,18 @@ Code Generator: WpPDE (<?php echo 'http://wp-pde.jaliansystems.com/'; ?>)
 <?php if (isset($meta_license_blurb)) echo str_replace("\r\n", "\n", $meta_license_blurb); ?>
 */
 
+if( !function_exists( 'Markdown' ) ) {
+  if( isset($wp_version) ) {
+    $wp_version_bak = $wp_version ;
+    unset( $wp_version );
+  }
+  require 'php-markdown-1.0.1o/markdown.php';
+  if( isset($wp_version_bak) ) {
+    $wp_version = $wp_version_bak ;
+    unset( $wp_version_bak );
+  }
+}
+
 <?php
   $admin_print_styles = array();
   $admin_print_scripts = array();
@@ -110,6 +122,19 @@ class <?php $classname = $plugin->get_classname(); echo $classname; ?> {
   }
 
 <?php endif; ?>
+}
+
+class <?php echo $plugin->get_classname(); ?>_StubFirePHP {
+	function __call($name, $arguments) {}
+}
+
+if(!isset($GLOBALS['pde_firephp'])) {
+	global $pde_firephp ;
+	$pde_firephp = new <?php echo $plugin->get_classname(); ?>_StubFirePHP();
+}
+
+if(!function_exists('pde_fb')) {
+	function pde_fb($x) {}
 }
 
 <?php $items = $plugin->get_action_items();

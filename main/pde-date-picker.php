@@ -96,7 +96,7 @@ class PDE_Date_Picker {
   static function enqueue_css( $args ) {
 ?>
 	   wp_enqueue_script( 'jquery-ui-datepicker' );
-     wp_enqueue_style( 'jquery-style', plugins_url( 'styles/jquery-ui-1.8.18.custom.css', dirname( __FILE__ ) ) );
+       wp_enqueue_style( 'jquery-style', plugins_url( 'styles/smoothness/jquery-ui-1.8.23.custom.css', dirname( __FILE__ ) ) );
 <?php
   }
 }

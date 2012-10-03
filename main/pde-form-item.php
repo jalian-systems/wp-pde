@@ -105,7 +105,7 @@ class PDEFormItem {
   function get_php_variable() {
     if (! empty($this->php_variable))
       return $this->php_variable ;
-    if( $this->param_type == 'label' || $this->param_type == 'markup' )
+    if( $this->param_type == 'label')
       return '';
     $var = $this->title;
     $pos = strpos($var, '__') ;
@@ -114,6 +114,12 @@ class PDEFormItem {
     }
     return apply_filters( 'pde_custom_form_item_get_php_variable_for_' . $this->param_type,
                             str_replace( '-', '_', sanitize_title_with_dashes( $var ) ), $this );
+  }
+
+  function get_select_text() {
+    if(!empty($this->select_text))
+      return $this->select_text ;
+    return 'Select an item' ;
   }
 
   function get_style() {

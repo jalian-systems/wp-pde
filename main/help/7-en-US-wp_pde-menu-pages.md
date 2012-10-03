@@ -28,6 +28,12 @@ editor area.
     Provide the icon to be shown in the admin menu (small 16x16) and the position
     of the menu.
 
+* _Metabox Support_
+
+    Select the type of meta box support you want to provide. You need to select this
+    option for adding meta boxes to your menu page. a `Normal` meta box is always
+    created if you select any option other than `None`.
+
 You can add more form elements to a menu page. See `Forms` help for more details.
 
 Do not forget to click on the `Save` option to save your changes. PDE creates an `usage` entry

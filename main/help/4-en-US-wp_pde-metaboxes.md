@@ -27,6 +27,9 @@ In the form editor area, you can change the parameters or add new form items.
 The form editor area, displays the configurable options. Edit the `Post Types`
 list and select the post types for which you want this metabox should be enabled.
 
+From v0.9.5, WpPDE Pro supports creating attaching Meta Boxes to menu pages. Use the
+`Menu Pages` list and select the menu pages for which you want this metabox to be displayed.
+
 You can add more form elements to a metabox. See `Forms` help for more details.
 
 Do not forget to click on the `Save` option to save your changes. PDE creates an `usage` entry

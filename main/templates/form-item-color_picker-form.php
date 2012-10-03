@@ -29,22 +29,21 @@
 <script type="text/javascript">
 (function($){
   var <?php echo $var; ?>_farbtastic = undefined;
-	var pickColor = function(a) {
+	var <?php echo $var; ?>_pickColor = function(a) {
 		$('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>').val(a);
 		$('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-example').css('background-color', a);
 	};
 
-  $('#wpbody-content').off( 'click', ".pde-plugin-pickcolor, .pde-plugin-pickcolor-example");
-  $('#wpbody-content').on( 'click', ".pde-plugin-pickcolor, .pde-plugin-pickcolor-example", function(e) {
+  $('#wpbody-content').on( 'click', "#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-button, #<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-example", function(e) {
     e.preventDefault();
     id = $(e.target).attr('id').replace(/-button$|-example$/, '')
 		if ( <?php echo $var; ?>_farbtastic == undefined ) {
-      pickColor = function(a) {
+      <?php echo $var; ?>_pickColor = function(a) {
         <?php echo $var; ?>_farbtastic.setColor(a);
         $('#' + id).val(a);
         $('#' + id + '-example').css('background-color', a);
       };
-		  <?php echo $var; ?>_farbtastic = $.farbtastic('#' + id + '-colorPickerDiv', pickColor);
+		  <?php echo $var; ?>_farbtastic = $.farbtastic('#' + id + '-colorPickerDiv', <?php echo $var; ?>_pickColor);
       $(document).mousedown( function() {
         $('#' + id + '-colorPickerDiv').hide();
       });
@@ -53,8 +52,7 @@
     $('#' + id + '-colorPickerDiv').show();
   });
 
-  $('#wpbody-content').off( 'keyup', '.pde-plugin-pickcolor-text');
-  $('#wpbody-content').on( 'keyup', '.pde-plugin-pickcolor-text',  function() {
+  $('#wpbody-content').on( 'keyup', '#<@php echo $this->get_field_id('<?php echo $var; ?>'); ?>',  function() {
     var a = $('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>').val(),
       b = a;
 
@@ -62,12 +60,12 @@
     if ( '#' + a !== b )
       $('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>').val(a);
     if ( a.length === 3 || a.length === 6 )
-      pickColor( '#' + a );
+      <?php echo $var; ?>_pickColor( '#' + a );
   });
 
 	$(document).ready( function() {
 
-		pickColor( $('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>').val() );
+		<?php echo $var; ?>_pickColor( $('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>').val() );
 
 		$(document).mousedown( function() {
 			$('#<@php echo $this->get_field_id('<?php echo $var; ?>'); @>-colorPickerDiv').hide();

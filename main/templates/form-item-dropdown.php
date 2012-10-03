@@ -32,7 +32,21 @@
     <span class="description-small"><?php echo __('Comma seperated list of options'); ?></span>
   </label>
 </p>
-<div>&nbsp;</div>
+
+<p class="field-value description description-wide">
+  <label for="edit-form-item-select-multiple-<?php echo $item->db_id; ?>">
+    <input type="checkbox" id="edit-form-item-select-multiple-<?php echo $item->db_id; ?>" value="select_multiple" name="db-<?php echo $item->db_id; ?>[select_multiple]"<?php checked( isset( $item->select_multiple ) ? $item->select_multiple : '', 'select_multiple' ); ?> />
+    <?php _e( 'Select multiple items' ); ?>
+  </label>
+</p>
+
+<p class="field-php-variable description description">
+  <label for="edit-form-item-select-text-<?php echo $item_id; ?>">
+    <?php _e( 'Text used for selection prompt' ); ?><br />
+    <input type="text" id="edit-form-item-select-text-<?php echo $item_id; ?>" class="widefat code edit-form-item-select-text" name="db-<?php echo $item_id; ?>[select_text]" value="<?php echo esc_attr( isset( $item->select_text ) ? $item->select_text : '' ); ?>" />
+    <span class="description-small"><?php echo sprintf(__("Currently using: '%s'"), $item->get_select_text()); ?></span>
+  </label>
+</p>
 
 <p class="field-php-variable description description">
   <label for="edit-form-item-php-variable-<?php echo $item_id; ?>">

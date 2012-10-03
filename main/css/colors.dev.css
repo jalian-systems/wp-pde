@@ -28,8 +28,8 @@
     border-bottom-color: #dfdfdf;
 }
 
-.toplevel_page_wp_pde #pde-plugin-footer  {
-    border-top-color: #fff;
+.toplevel_page_wp_pde #pde-plugin-footer {
+	border-top: 1px solid #d0dfe9;
 }
 
 .toplevel_page_wp_pde #plugin-management .wp-pde-tabs-arrow a  {

@@ -218,17 +218,13 @@ class PDE_Dropdown_Item {
           }
         });
       });
+      $('.wp-pde-dropdown-item').trigger('change');
     });
   })(jQuery);
   </script>
   <?php
       }
   ?>
-  <script type="text/javascript">
-  (function($) {
-    $('.wp-pde-dropdown-item').trigger('change');
-  })(jQuery);
-  </script>
   <?php
       $start_level .= ob_get_clean();
     }

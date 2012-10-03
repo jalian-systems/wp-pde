@@ -13,34 +13,6 @@ function _bt($bt) {
   return $str;
 }
 
-function stacktrace_error_handler($errno, $errstr, $errfile, $errline)
-{
-    if($errno) {
-      if (strpos($errstr, "Walker") === false) {
-        $bt = _bt(debug_backtrace());
-        if ($bt) {
-          js_debug("Error $errstr: $errfile:$errline\ncalled from:");
-				  js_debug(_bt(debug_backtrace()));
-          wp_die('I am done with this');
-        }
-      }
-    }
-    return true; // to execute the regular error handler
-}
-// set_error_handler("stacktrace_error_handler");
-
-if (!function_exists('js_debug')) {
-  function js_debug($m) {
-  ?>
-    <script type="text/javascript" language="javascript">
-    //<![CDATA[
-    console.log("<?php echo esc_js($m); ?>");
-    //]]>
-    </script> 
-  <?php
-  }
-}
-
 if (!function_exists('wp_get_current_user')) {
   require_once ABSPATH . 'wp-includes/pluggable.php';
 }
@@ -55,6 +27,7 @@ require_once dirname(__FILE__) . '/pde-radio.php' ;
 require_once dirname(__FILE__) . '/pde-dropdown.php' ;
 require_once dirname(__FILE__) . '/pde-color-picker.php' ;
 require_once dirname(__FILE__) . '/pde-date-picker.php' ;
+require_once dirname(__FILE__) . '/pde-action-button.php' ;
 
 require_once dirname(__FILE__) . '/export.php' ;
 
@@ -97,6 +70,7 @@ class PDEPlugin {
   }
 
   static $testing_plugin = false;
+  static $testing_plugin_object ;
 
   static function load_test_plugins() {
     $_pde_plugins = PDEPlugin::get_all();
@@ -112,25 +86,21 @@ class PDEPlugin {
       if (!is_readable($plugin_file)) {
         continue ;
       }
-      $testoption = 'test_'. str_replace('-', '_', sanitize_title_with_dashes($plugin_file)) ;
-      if (isset($options[$testoption])) {
-        $plugin_object->update_option('test', false);
-        $plugin_object->update_option($testoption, false);
-        continue;
-      }
-      $plugin_object->update_option($testoption, true);
       register_shutdown_function(array('PDEPlugin', 'shutdown'));
       PDEPlugin::$testing_plugin = true ;
+      PDEPlugin::$testing_plugin_object = $plugin_object ;
       include $plugin_file;
       PDEPlugin::$testing_plugin = false ;
-      $plugin_object->update_option($testoption, false);
     }
   }
 
   static function shutdown() {
     $last_error = error_get_last();
     if (PDEPlugin::$testing_plugin && $last_error) {
+      PDEPlugin::$testing_plugin_object->update_option('test', false);
       echo "<br/><strong>Plugin code generated an error. No worry, refresh the page and the plugin will be disabled</strong><br/>";
+      echo $last_error['message'];
+      echo 'at ' . $last_error['file'] . ':' . $last_error['line'] . '<br/>' ;
     }
   }
 
@@ -250,8 +220,8 @@ class PDEPlugin {
     if( !is_dir( $project_dir . '/styles' ) )
       mkdir( $project_dir . '/styles' );
 
-    copy( dirname( __FILE__ ) . '/styles/jquery-ui-1.8.18.custom.css', $project_dir . '/styles/jquery-ui-1.8.18.custom.css' );
-    $this->rcopy( dirname( __FILE__ ) . '/styles/images', $project_dir . '/styles/images' );
+	  $this->rcopy( dirname( __FILE__ ) . '/styles/smoothness', $project_dir . '/styles/smoothness' );
+    $this->rcopy( dirname( __FILE__ ) . '/php-markdown-1.0.1o', $project_dir . '/php-markdown-1.0.1o' );
   }
 
   function rcopy($src, $dst) {
@@ -506,6 +476,7 @@ class PDEPlugin {
 	  add_meta_box( 'add-meta-information', __('About this Plugin'), array('PDEPlugin', 'pde_plugin_meta_info_meta_box'), $screen, 'normal', 'low');
 	  add_filter( 'manage_'.$screen->id.'_columns', array('PDEPlugin', 'pde_plugin_manage_resources'));
     PDEPlugin::pde_plugin_setup_help($screen, 'wp_pde' );
+	  add_meta_box( 'editor-keybindings', __('Editor Keybindings'), array('PDEPlugin', 'pde_plugin_editor_keybindings_metabox'), $screen, 'normal', 'high');
   }
 
   static function pde_plugin_setup_help($screen, $menu_slug) {
@@ -552,6 +523,26 @@ class PDEPlugin {
   <?php
   }
 
+  static function support_us() {
+    if( class_exists( 'WpPDEProPlugin' ) )
+      return ;
+?>
+    <div id="side-sortables" class="meta-box-sortables"><div id="add-pdeplugin-items" class="postbox " >
+      <div class="handlediv" title="Click to toggle"><br /></div><h3 class='hndle'><span>Spread the Word!</span></h3>
+        <div class="inside">
+          <p>Help us in making this plugin even better. All proceeds from <a href="http://wp-pde.jaliansystems.com/wp-pde-pro-add-on-pack-for-wppde/">WpPDE Pro</a> are used to improve both the plugins.</p>
+		  <ul>
+			<li><a href="http://wordpress.org/extend/plugins/wp-pde/">Rate the plugin 5-stars on WordPress.org</a></li>
+			<li><a href="http://wp-pde.jaliansystems.com/pde-plugin-development-environment/">Write about it on your blog &amp; link to the plugin page</a></li>
+			<li><a href="http://wp-pde.jaliansystems.com/buy-now/">Buy WpPDE Pro Addon pack</a></li>
+			<li><a href="https://twitter.com/wppde">Follow us on twitter</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</div>
+<?php
+  }
+
   static function pde_plugin_add_pdeplugin_item_meta_box( $args ) {
 
     extract ( $args );
@@ -596,9 +587,60 @@ class PDEPlugin {
   ?>
           </span>
         </label>
-          <input id="pdeplugin-item-name" name="pluginitem_name" type="text" class=" widefat metabox-side-input input-with-default-title" title="<?php esc_attr_e('Name'); ?>" />
+		<span class="enable-for-action pdeplugin-item-optional" style="margin:0;padding:0">
+			<select id="pdeplugin-action-name" name="pluginitem_action_name" class=" widefat metabox-side-input">
+				<option value="other" >Other</option>
+				<?php PDEPlugin::list_hooks('action'); ?>
+			</select>
+			<label>&nbsp;</label>
+		</span>
+		<span class="enable-for-filter pdeplugin-item-optional" style="margin:0;padding:0;display:none">
+			<select id="pdeplugin-filter-name" name="pluginitem_filter_name" class=" widefat metabox-side-input">
+				<option value="other" >Other</option>
+				<?php PDEPlugin::list_hooks('filter'); ?>
+			</select>
+			<label>&nbsp;</label>
+		</span>
+		<?php if(!PDEPlugin::has_hooks_db()) : ?>
+		<div class="enable-for-action enable-for-filter pdeplugin-item-optional" style="margin:0;padding:0;">
+		<p>The hooks table is empty. You can initialize the table by visiting <a href="<?php echo esc_attr_e(add_query_arg(array('instrument' => 'hooks', 'init' => '1'), site_url())); ?>"><?php echo esc_html_e(add_query_arg(array('instrument' => 'hooks', 'init' => '1'), site_url())); ?></a>. Visit any page after adding &amp;instrument=hooks to it to populate the hooks table.</p>
+		</div>
+		<?php endif; ?>
+        <input id="pdeplugin-item-name" name="pluginitem_name" type="text" class=" widefat metabox-side-input input-with-default-title" title="<?php esc_attr_e('Name'); ?>" />
       </p>
 
+<script type="text/javascript">
+(function($) {
+  $('#pdeplugin-action-name').change(function (e) {
+	sel = $(this).val();
+	if(sel == 'other') {
+		$('#pdeplugin-item-name').removeAttr('disabled');
+		$('#pdeplugin-item-name').val('');
+	}
+	else {
+		$('#pdeplugin-item-name').val(sel);
+		$('#pdeplugin-item-name').attr('disabled', 'disabled');
+	}
+	return true ;
+  });
+})(jQuery);
+</script>
+<script type="text/javascript">
+(function($) {
+  $('#pdeplugin-filter-name').change(function (e) {
+	sel = $(this).val();
+	if(sel == 'other') {
+		$('#pdeplugin-item-name').removeAttr('disabled');
+		$('#pdeplugin-item-name').val('');
+	}
+	else {
+		$('#pdeplugin-item-name').val(sel);
+		$('#pdeplugin-item-name').attr('disabled', 'disabled');
+	}
+	return true ;
+  });
+})(jQuery);
+</script>
   <div id='pdeplugin-item-options-action-filter' class='pdeplugin-item-optional enable-for-action enable-for-filter'>
       <p id="pdeplugin-item-method-wrap" class="pdeplugin-item-p-param">
         <label class="metabox-side-label" for="pdeplugin-item-method">
@@ -647,6 +689,22 @@ class PDEPlugin {
 	<?php
 }
 
+  static function list_hooks($type) {
+		global $wpdb;
+		$hooks = $wpdb->get_results("SELECT DISTINCT hook_name FROM wp_pde_hook_list WHERE hook_type = '$type' ORDER BY hook_name");
+		foreach($hooks as $hook) {
+		?>
+          <option value="<?php esc_attr_e($hook->hook_name); ?>"><?php esc_html_e($hook->hook_name); ?></option>
+		<?php
+		}
+  }
+
+  static function has_hooks_db() {
+		global $wpdb;
+		$hooks = $wpdb->get_results("SELECT DISTINCT hook_name FROM wp_pde_hook_list");
+		return count($hooks) != 0 ;
+  }
+
   static function pde_plugin_meta_info_meta_box( $args ) {
 
     extract( $args );
@@ -668,6 +726,7 @@ class PDEPlugin {
     <p id="metadiv-description-wrap">
       <label class="metabox-normal-label" for="metadiv-description"><?php _e('Description:'); ?></label>
         <input id="metadiv-description" name="meta_short_description" value="<?php echo esc_attr( $meta_short_description ); ?>"  type="text" class=" widefat metabox-normal-input "  />
+      <label class="metabox-normal-description" for="metadiv-description"><?php _e('Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.'); ?></label>
     </p>
 
     <p id="metadiv-plugin-uri-wrap">
@@ -777,14 +836,14 @@ class PDEPlugin {
 }
 
   static function ace_theme_option($file) {
-    if (strpos($file, 'theme-') === false || strpos($file, '-noconflict.js') === false || strpos($file, 'uncompressed') !== false)
+    if (strpos($file, 'theme-') === false)
       return ;
 ?>
-        <option value="<?php echo $file; ?>" <?php selected(get_user_option('wp_pde_ace_theme'), $file) ?>><?php echo substr($file, 6, -14); ?></option>
+        <option value="<?php echo $file; ?>" <?php selected(get_user_option('wp_pde_ace_theme'), $file) ?>><?php echo substr($file, 6, -3); ?></option>
 <?php
   }
   static function get_ace_themes() {
-    $files = scandir(dirname(__FILE__) . '/js/ace-0.2');
+    $files = scandir(dirname(__FILE__) . '/js/ace-builds/src-min-noconflict');
     array_map(array('PDEPlugin', 'ace_theme_option'), $files);
   }
 
@@ -805,11 +864,30 @@ class PDEPlugin {
         </select>
     </p>
 
+    <div id="ta-editor-options" style="display:<?php echo (get_user_option('wp_pde_editor') !== 'Ace' ? 'block' : 'none');  ?>" >
+      <p id="options-div-ta-editor-save-on-change">
+        <label class="metabox-side-label" for="ta-editor-save-on-change"> <span><?php _e('Save on change:'); ?></span></label>
+          <select id="ta-editor-save-on-change" name="ta-editor-save-on-change" class=" widefat metabox-side-input input-with-default-title">
+            <option value="Yes" <?php selected(get_user_option('wp_pde_ta_save_on_change'), 'Yes') ?>><?php _e('Yes'); ?></option>
+            <option value="No" <?php selected(get_user_option('wp_pde_ta_save_on_change'), 'No') ?>><?php _e('No'); ?></option>
+          </select>
+      </p>
+    </div> <!-- ta-editor-options -->
+
     <div id="ace-editor-options" style="display:<?php echo (get_user_option('wp_pde_editor') === 'Ace' ? 'block' : 'none');  ?>" >
       <p id="options-div-ace-editor-theme">
         <label class="metabox-side-label" for="ace-editor-theme"><?php _e('Theme:'); ?></label>
           <select id="ace-editor-theme" name="ace-editor-theme" class=" widefat metabox-side-input input-with-default-title">
             <?php PDEPlugin::get_ace_themes(); ?>
+          </select>
+      </p>
+
+      <p id="options-div-ace-editor-key-binding">
+        <label class="metabox-side-label" for="ace-editor-key-binding"> <span><?php _e('Key Binding:'); ?></span></label>
+          <select id="ace-editor-key-binding" name="ace-editor-key-binding" class=" widefat metabox-side-input input-with-default-title">
+            <option value="ace" <?php selected(get_user_option('wp_pde_ace_key_binding'), 'ace') ?>><?php _e('Ace'); ?></option>
+            <option value="emacs" <?php selected(get_user_option('wp_pde_ace_key_binding'), 'emacs') ?>><?php _e('Emacs'); ?></option>
+            <option value="vim" <?php selected(get_user_option('wp_pde_ace_key_binding'), 'vim') ?>><?php _e('Vim'); ?></option>
           </select>
       </p>
 
@@ -847,6 +925,15 @@ class PDEPlugin {
             <option value="No" <?php selected(get_user_option('wp_pde_ace_wrap_mode'), 'No') ?>><?php _e('No Wrap'); ?></option>
           </select>
       </p>
+
+      <p id="options-div-ace-editor-indent-guides">
+        <label class="metabox-side-label" for="ace-editor-indent-guides"><?php _e('Indent Guides:'); ?></label>
+          <select id="ace-editor-indent-guides" name="ace-editor-indent-guides" class=" widefat metabox-side-input input-with-default-title">
+            <option value="Yes" <?php selected(get_user_option('wp_pde_ace_indent_guides'), 'Yes') ?>><?php _e('Display'); ?></option>
+            <option value="No" <?php selected(get_user_option('wp_pde_ace_indent_guides'), 'No') ?>><?php _e('Hide'); ?></option>
+          </select>
+      </p>
+
     </div> <!-- #ace-editor-options -->
 
     <p class="button-controls">
@@ -873,11 +960,11 @@ class PDEPlugin {
   <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
   <input type="hidden" value="add-file" name="action" />
 
+  <ul>
   <?php foreach( $external_files as $file ) { ?>
-    <ul>
       <?php PDEPlugin::emit_file_markup( $file ); ?>
-    </ul>
   <?php } ?>
+  </ul>
   <p class="button-controls">
     <span class="update-options">
       <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
@@ -910,6 +997,31 @@ class PDEPlugin {
     <div class="clear"></div>
   </div>
 </form>
+
+<form id="pde-plugin-add-file-new" action="#" class="pde-plugin-add-files" method="post" enctype="multipart/form-data">
+  <?php wp_nonce_field('add-pdeplugin-file-' . $plugin_id); ?>
+  <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
+  <input type="hidden" value="add-file-new" name="action" />
+  <div id="html-upload-ui-new">
+    <p id="metadiv-add-files-new">
+      <label class="metabox-side-label" for="metadiv-path-new"><?php _e('Folder:'); ?></label>
+        <input id="metadiv-path-new" name="file_path_new" value=""  type="text" class=" widefat metabox-side-input metabox-side-input-path "  />
+    </p>
+
+    <p id="metadiv-add-files-new-filename">
+      <label class="metabox-side-label" for="metadiv-path-new-filename"><?php _e('File Name:'); ?></label>
+        <input id="metadiv-path-new0-filename" name="file_name" value=""  type="text" class=" widefat metabox-side-input metabox-side-input-path "  />
+    </p>
+    <p class="button-controls">
+      <span class="update-options">
+        <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
+        <input type="submit"<?php disabled( $plugin_id, 0 ); ?> class="button-secondary submit-add-to-plugin" value="<?php esc_attr_e('Add to Plugin'); ?>" name="add-pdeplugin-file" id="submit-pdepluginaddfile-new"/>
+      </span>
+    </p>
+    <div class="clear"></div>
+  </div>
+</form>
+
   <?php
   }
 
@@ -928,6 +1040,8 @@ class PDEPlugin {
       $enque_style = true ;
     }
 
+    if( !$require && !$enque_script && !$enque_style )
+      return ;
   ?>
       <li>
         <strong><?php echo $file->title; ?></strong><br/>
@@ -968,6 +1082,415 @@ class PDEPlugin {
     }
     return $core ;
   }
+
+  static function pde_plugin_editor_keybindings_metabox() {
+?>
+<table>
+<thead><tr>
+<th align="left">PC (Windows/Linux)</th>
+<th align="left">Mac</th>
+<th align="left">action</th>
+</tr></thead>
+<tbody>
+<tr>
+<td align="left">Ctrl-Enter</td>
+<td align="left">Command-Enter</td>
+<td align="left">Full Screen editor</td>
+</tr>
+<tr>
+<td align="left">Ctrl-S</td>
+<td align="left">Command-S</td>
+<td align="left">Save file</td>
+</tr>
+<tr>
+<td align="left">Ctrl-B</td>
+<td align="left">Command-B</td>
+<td align="left">Save Plugin</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Up</td>
+<td align="left">Ctrl-Alt-Up</td>
+<td align="left">add multi-cursor above</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Down</td>
+<td align="left">Ctrl-Alt-Down</td>
+<td align="left">add multi-cursor below</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Right</td>
+<td align="left">Ctrl-Alt-Right</td>
+<td align="left">add next occurrence to multi-selection</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Left</td>
+<td align="left">Ctrl-Alt-Left</td>
+<td align="left">add previous occurrence to multi-selection</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">Ctrl-L</td>
+<td align="left">center selection</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-U</td>
+<td align="left">Ctrl-Shift-U</td>
+<td align="left">change to lower case</td>
+</tr>
+<tr>
+<td align="left">Ctrl-U</td>
+<td align="left">Ctrl-U</td>
+<td align="left">change to upper case</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-Down</td>
+<td align="left">Command-Option-Down</td>
+<td align="left">copy lines down</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-Up</td>
+<td align="left">Command-Option-Up</td>
+<td align="left">copy lines up</td>
+</tr>
+<tr>
+<td align="left">Delete</td>
+<td align="left"></td>
+<td align="left">delete</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-D</td>
+<td align="left">Command-Shift-D</td>
+<td align="left">duplicate selection</td>
+</tr>
+<tr>
+<td align="left">Ctrl-F</td>
+<td align="left">Command-F</td>
+<td align="left">find</td>
+</tr>
+<tr>
+<td align="left">Ctrl-K</td>
+<td align="left">Command-G</td>
+<td align="left">find next</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-K</td>
+<td align="left">Command-Shift-G</td>
+<td align="left">find previous</td>
+</tr>
+<tr>
+<td align="left">Alt-0</td>
+<td align="left">Option-0</td>
+<td align="left">fold all</td>
+</tr>
+<tr>
+<td align="left">Alt-L, Ctrl-F1</td>
+<td align="left">Command-Alt-L, Command-F1</td>
+<td align="left">fold selection</td>
+</tr>
+<tr>
+<td align="left">Down</td>
+<td align="left">Down,Ctrl-N</td>
+<td align="left">go line down</td>
+</tr>
+<tr>
+<td align="left">Up</td>
+<td align="left">Up,Ctrl-P</td>
+<td align="left">go line up</td>
+</tr>
+<tr>
+<td align="left">Ctrl-End</td>
+<td align="left">Command-End,Command-Down</td>
+<td align="left">go to end</td>
+</tr>
+<tr>
+<td align="left">Left</td>
+<td align="left">Left,Ctrl-B</td>
+<td align="left">go to left</td>
+</tr>
+<tr>
+<td align="left">Ctrl-L</td>
+<td align="left">Command-L</td>
+<td align="left">go to line</td>
+</tr>
+<tr>
+<td align="left">Alt-Right, End</td>
+<td align="left">Command-Right,End,Ctrl-E</td>
+<td align="left">go to line end</td>
+</tr>
+<tr>
+<td align="left">Alt-Left, Home</td>
+<td align="left">Command-Left,Home,Ctrl-A</td>
+<td align="left">go to line start</td>
+</tr>
+<tr>
+<td align="left">Ctrl-P</td>
+<td align="left"></td>
+<td align="left">go to matching bracket</td>
+</tr>
+<tr>
+<td align="left">PageDown</td>
+<td align="left">Option-PageDown,Ctrl-V</td>
+<td align="left">go to page down</td>
+</tr>
+<tr>
+<td align="left">PageUp</td>
+<td align="left">Option-PageUp</td>
+<td align="left">go to page up</td>
+</tr>
+<tr>
+<td align="left">Right</td>
+<td align="left">Right,Ctrl-F</td>
+<td align="left">go to right</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Home</td>
+<td align="left">Command-Home,Command-Up</td>
+<td align="left">go to start</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Left</td>
+<td align="left">Option-Left</td>
+<td align="left">go to word left</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Right</td>
+<td align="left">Option-Right</td>
+<td align="left">go to word right</td>
+</tr>
+<tr>
+<td align="left">Tab</td>
+<td align="left">Tab</td>
+<td align="left">indent</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-E</td>
+<td align="left"></td>
+<td align="left">macros recording</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-E</td>
+<td align="left">Command-Shift-E</td>
+<td align="left">macros replay</td>
+</tr>
+<tr>
+<td align="left">Alt-Down</td>
+<td align="left">Option-Down</td>
+<td align="left">move lines down</td>
+</tr>
+<tr>
+<td align="left">Alt-Up</td>
+<td align="left">Option-Up</td>
+<td align="left">move lines up</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Shift-Up</td>
+<td align="left">Ctrl-Alt-Shift-Up</td>
+<td align="left">move multicursor from current line to the line above</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Shift-Down</td>
+<td align="left">Ctrl-Alt-Shift-Down</td>
+<td align="left">move multicursor from current line to the line below</td>
+</tr>
+<tr>
+<td align="left">Shift-Tab</td>
+<td align="left">Shift-Tab</td>
+<td align="left">outdent</td>
+</tr>
+<tr>
+<td align="left">Insert</td>
+<td align="left">Insert</td>
+<td align="left">overwrite</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-Z,Ctrl-Y</td>
+<td align="left">Command-Shift-Z,Command-Y</td>
+<td align="left">redo</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Shift-Right</td>
+<td align="left">Ctrl-Alt-Shift-Right</td>
+<td align="left">remove current occurrence from multi-selection and move to next</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Alt-Shift-Left</td>
+<td align="left">Ctrl-Alt-Shift-Left</td>
+<td align="left">remove current occurrence from multi-selection and move to previous</td>
+</tr>
+<tr>
+<td align="left">Ctrl-D</td>
+<td align="left">Command-D</td>
+<td align="left">remove line</td>
+</tr>
+<tr>
+<td align="left">Alt-Delete</td>
+<td align="left">Ctrl-K</td>
+<td align="left">remove to line end</td>
+</tr>
+<tr>
+<td align="left">Alt-Backspace</td>
+<td align="left">Command-Backspace</td>
+<td align="left">remove to linestart</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Backspace</td>
+<td align="left">Alt-Backspace, Ctrl-Alt-Backspace</td>
+<td align="left">remove word left</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Delete</td>
+<td align="left">Alt-Delete</td>
+<td align="left">remove word right</td>
+</tr>
+<tr>
+<td align="left">Ctrl-R</td>
+<td align="left">Command-Option-F</td>
+<td align="left">replace</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-R</td>
+<td align="left">Command-Shift-Option-F</td>
+<td align="left">replace all</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Down</td>
+<td align="left">Command-Down</td>
+<td align="left">scroll line down</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Up</td>
+<td align="left"></td>
+<td align="left">scroll line up</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">Option-PageDown</td>
+<td align="left">scroll page down</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">Option-PageUp</td>
+<td align="left">scroll page up</td>
+</tr>
+<tr>
+<td align="left">Ctrl-A</td>
+<td align="left">Command-A</td>
+<td align="left">select all</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-L</td>
+<td align="left">Ctrl-Shift-L</td>
+<td align="left">select all from multi-selection</td>
+</tr>
+<tr>
+<td align="left">Shift-Down</td>
+<td align="left">Shift-Down</td>
+<td align="left">select down</td>
+</tr>
+<tr>
+<td align="left">Shift-Left</td>
+<td align="left">Shift-Left</td>
+<td align="left">select left</td>
+</tr>
+<tr>
+<td align="left">Shift-End</td>
+<td align="left">Shift-End</td>
+<td align="left">select line end</td>
+</tr>
+<tr>
+<td align="left">Shift-Home</td>
+<td align="left">Shift-Home</td>
+<td align="left">select line start</td>
+</tr>
+<tr>
+<td align="left">Shift-PageDown</td>
+<td align="left">Shift-PageDown</td>
+<td align="left">select page down</td>
+</tr>
+<tr>
+<td align="left">Shift-PageUp</td>
+<td align="left">Shift-PageUp</td>
+<td align="left">select page up</td>
+</tr>
+<tr>
+<td align="left">Shift-Right</td>
+<td align="left">Shift-Right</td>
+<td align="left">select right</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-End</td>
+<td align="left">Command-Shift-Down</td>
+<td align="left">select to end</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-Right</td>
+<td align="left">Command-Shift-Right</td>
+<td align="left">select to line end</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-Left</td>
+<td align="left">Command-Shift-Left</td>
+<td align="left">select to line start</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-P</td>
+<td align="left"></td>
+<td align="left">select to matching bracket</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-Home</td>
+<td align="left">Command-Shift-Up</td>
+<td align="left">select to start</td>
+</tr>
+<tr>
+<td align="left">Shift-Up</td>
+<td align="left">Shift-Up</td>
+<td align="left">select up</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-Left</td>
+<td align="left">Option-Shift-Left</td>
+<td align="left">select word left</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Shift-Right</td>
+<td align="left">Option-Shift-Right</td>
+<td align="left">select word right</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">Ctrl-O</td>
+<td align="left">split line</td>
+</tr>
+<tr>
+<td align="left">Ctrl-/</td>
+<td align="left">Command-/</td>
+<td align="left">toggle comment</td>
+</tr>
+<tr>
+<td align="left">Ctrl-T</td>
+<td align="left">Ctrl-T</td>
+<td align="left">transpose letters</td>
+</tr>
+<tr>
+<td align="left">Ctrl-Z</td>
+<td align="left">Command-Z</td>
+<td align="left">undo</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-L, Ctrl-Shift-F1</td>
+<td align="left">Command-Alt-Shift-L,Command-Shift-F1</td>
+<td align="left">unfold</td>
+</tr>
+<tr>
+<td align="left">Alt-Shift-0</td>
+<td align="left">Option-Shift-0</td>
+<td align="left">unfold all</td>
+</tr>
+</tbody>
+</table>
+<?php
+	}
 
   function add_test_button($id) {
     $plugin_test = $this->get_option('test');
@@ -1130,6 +1653,7 @@ class PDEPlugin {
 
   static function setup_editor(){
 		wp_enqueue_style('wp-pde');
+		wp_enqueue_style('select2');
 		wp_enqueue_style('wp-pde-colors');
     $update = false ;
     $editor = get_user_option('wp_pde_editor');
@@ -1137,12 +1661,18 @@ class PDEPlugin {
       $update = true ;
       $editor = 'Ace';
     }
+    $ta_save_on_change = get_user_option('wp_pde_ta_save_on_change');
+    if(!$ta_save_on_change)
+      $ta_save_on_change = 'No' ;
     $ace_theme = get_user_option('wp_pde_ace_theme');
     if (!$ace_theme)
-      $ace_theme = 'theme-twilight-noconflict.js';
+      $ace_theme = 'theme-twilight.js';
     $ace_display_gutter = get_user_option('wp_pde_ace_display_gutter');
     if (!$ace_display_gutter)
       $ace_display_gutter = 'Yes';
+    $ace_key_binding = get_user_option('wp_pde_ace_key_binding');
+    if (!$ace_key_binding)
+      $ace_key_binding = 'ace';
     $ace_font_size = get_user_option('wp_pde_ace_font_size');
     if (!$ace_font_size)
       $ace_font_size = '11px';
@@ -1152,17 +1682,24 @@ class PDEPlugin {
     $ace_wrap_mode = get_user_option('wp_pde_ace_wrap_mode');
     if (!$ace_wrap_mode)
       $ace_wrap_mode = 'No';
+    $ace_indent_guides = get_user_option('wp_pde_ace_indent_guides');
+    if (!$ace_indent_guides)
+      $ace_indent_guides = 'No';
 
     if ($update) {
 		  global $current_user;
 		  update_user_meta( $current_user->ID, 'wp_pde_editor', $editor );
+		  update_user_meta( $current_user->ID, 'wp_pde_ta_save_on_change', $ta_save_on_change );
 		  update_user_meta( $current_user->ID, 'wp_pde_ace_theme', $ace_theme );
 		  update_user_meta( $current_user->ID, 'wp_pde_ace_display_gutter', $ace_display_gutter );
+		  update_user_meta( $current_user->ID, 'wp_pde_ace_key_binding', $ace_key_binding );
 		  update_user_meta( $current_user->ID, 'wp_pde_ace_font_size', $ace_font_size );
 		  update_user_meta( $current_user->ID, 'wp_pde_ace_print_margin', $ace_print_margin );
 		  update_user_meta( $current_user->ID, 'wp_pde_ace_wrap_mode', $ace_wrap_mode );
+		  update_user_meta( $current_user->ID, 'wp_pde_ace_indent_guides', $ace_indent_guides );
     }
 
+    wp_enqueue_script('select2');
     wp_enqueue_script('wp-pde');
     wp_localize_script( 'wp-pde', 'wpPDEPluginVar', array(
       'noResultsFound' => _x('No results found.', 'search results'),
@@ -1173,21 +1710,27 @@ class PDEPlugin {
       'duplicateProject' => __( "Either the name or version changed in the project. PDE can duplicate the project. \n 'Cancel' to continue, 'OK' to duplicate." ),
       'errorIllegalValues' => __( "One or more of the fields have an empty label. Labels are mandatory. Use __ as prefix to hide them in plugin configuration" ),
       'editor' => $editor,
-      'ace_theme' => substr($ace_theme, 6, -14),
+      'ta_save_on_change' => $ta_save_on_change,
+      'ace_theme' => substr($ace_theme, 6, -3),
       'ace_display_gutter' => $ace_display_gutter,
+      'ace_key_binding' => $ace_key_binding,
       'ace_font_size' => $ace_font_size,
       'ace_print_margin' => $ace_print_margin,
       'ace_wrap_mode' => $ace_wrap_mode,
+      'ace_indent_guides' => $ace_indent_guides,
     ) );
 
-		wp_register_script('ace_0.2-' . substr($ace_theme, 6, -14), plugins_url( 'js/ace-0.2/' . $ace_theme, __FILE__));
+		wp_register_script('ace_0.2-' . substr($ace_theme, 6, -14), plugins_url( 'js/ace-builds/src-min-noconflict/' . $ace_theme, __FILE__));
 		wp_enqueue_script('ace_0.2');
 		wp_enqueue_script('ace_0.2-' . substr($ace_theme, 6, -14));
 		wp_enqueue_script('ace_0.2-mode-php');
 		wp_enqueue_script('ace_0.2-mode-markdown');
 		wp_enqueue_script('ace_0.2-mode-css');
 		wp_enqueue_script('ace_0.2-mode-javascript');
+		wp_enqueue_script('ace_0.2-keybinding-emacs');
+		wp_enqueue_script('ace_0.2-keybinding-vim');
     wp_enqueue_script('jquery-ui-datepicker');
+    wp_enqueue_script('jquery-ui-tabs');
   }
 
   function emit_editor_widgets($current_file) {
@@ -1242,7 +1785,7 @@ class PDEPlugin {
       if( has_filter( $filter ) ) {
         return apply_filters( $filter, '', $this, $current_file) ;
       } else {
-        js_debug('Unknown emit for ' . $type);
+        fb('Unknown emit for ' . $type);
         return '' ;
       }
     }
@@ -1279,7 +1822,7 @@ class PDEPlugin {
     if( !$src || is_wp_error( $src ) )
       return $src ;
 
-    $plugin = PDEPlugin::create( $plugin_data, &$messages );
+    $plugin = PDEPlugin::create( $plugin_data, $messages );
     if( !$plugin || is_wp_error( $plugin ) )
       return $plugin ;
 

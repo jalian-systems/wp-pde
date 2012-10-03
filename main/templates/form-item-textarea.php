@@ -6,9 +6,9 @@
   </label>
 </p>
 <p class="description description-thin">
-  <label for="edit-form-item-default-value-<?php echo $item_id; ?>">
+  <label for="edit-form-item-rows-<?php echo $item_id; ?>">
     <?php _e('Rows'); ?><br />
-    <input type="text" id="edit-form-item-default-value-<?php echo $item_id; ?>" class="widefat edit-form-item-default-value" name="db-<?php echo $item_id; ?>[rows]" value="<?php echo esc_attr( isset( $item->default_value ) ? $item->default_value : '' ); ?>" />
+    <input type="text" id="edit-form-item-rows-<?php echo $item_id; ?>" class="widefat edit-form-item-rows" name="db-<?php echo $item_id; ?>[rows]" value="<?php echo esc_attr( isset( $item->rows ) ? $item->rows : '' ); ?>" />
   </label>
 </p>
 <p class="field-description description description-wide">
@@ -18,7 +18,14 @@
   </label>
 </p>
 
-<p class="field-value description description-wide">
+<p class="field-value description description-thin">
+  <label for="edit-form-item-full-width-<?php echo $item->db_id; ?>">
+    <input type="checkbox" id="edit-form-item-full-width-<?php echo $item->db_id; ?>" value="full_width" name="db-<?php echo $item->db_id; ?>[full_width]"<?php checked( isset( $item->full_width ) ? $item->full_width : '', 'full_width' ); ?> />
+    <?php _e( 'Use full width' ); ?>
+  </label>
+</p>
+
+<p class="field-value description description-thin">
   <label for="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>">
     <input type="checkbox" id="edit-form-item-description-html-escape-<?php echo $item->db_id; ?>" value="description_html_escape" name="db-<?php echo $item->db_id; ?>[description_html_escape]"<?php checked( isset( $item->description_html_escape ) ? $item->description_html_escape : '', 'description_html_escape' ); ?> />
     <?php _e( 'Escape HTML in description' ); ?>
