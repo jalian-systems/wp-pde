@@ -110,7 +110,39 @@ You can change the editor options using the `Editor Options` box.
 
 ## Changelog
 
-## 0.9.4
+### 1.0
+
+* When a PDE Plugin is enabled/disabled, the page is refreshed. Any errors in the enabled plugin are displayed in the message area.
+* Using the external files metabox, you can add a new empty file now.
+* Text areas support full-width option.
+* An action button component is available. WpPDE Pro menu pages add an action hook for the same. In widgets and metaboxes you need to use markup component to add appropriate ajax code and use wp_ajax/wp_ajax_nopriv hooks on the backend.
+* A raw option is added for markup. The markup contents as is are copied into the generated code.
+* Dropdown list supports multiple selection now.
+* Dropdown list supports a php code fragment in the options. Use this to call a php method that generates the appropriate markup for the option list.
+* A pde-widget-defaults hook is added. You can update the defaults for the widget for using this.
+* Ace editor support is enhanced: you can select vim/emacs key binding. display indent option is also added. A editor keybindings help is added as a metabox. We use ace editor bundle from acebuilds project.
+* Checkbox supports a label now.
+* WpPDE supports FirePHP which is bundled along with it. You can use firephp classes/methods. See the help.
+* Ace editor hooks to Command/Control+B for updating the project.
+* The action/filter selection uses select2 dropdown which allows for search in the list. You need to populate the hooks table. See help.
+* Save on change option for text area editor - useful with itsalltext plugin.
+* Multi file uploader
+
+Bug Fixes:
+
+* The php-markdown folder is added to generated plugins. Needed to support help.
+* Added License: to readme.txt
+* When textarea editor is choosen the plugin duplicate functionality was not active.
+* Editor change contents (text area) not setting dirty flag.
+* The form editor supports upto 10 levels now. Due to a bug, this was only 4 levels earlier.
+* Textarea component was not saving the number of rows.
+* External files copied into the plugin folder have a '/' prefixed.
+* The save editor contents, add form item etc. ajax calls shows proper error messages when failed now.
+* A markup form item when added also creates a form field. Useful for adding hidden fields.
+* Multiple color pickers not working in a single form.
+* The zip contents do not have a version tag prefix now. Followed normal Wordpress custom.
+
+### 0.9.4
 
 * Added plugin selection for exporting a plugin project.
 * BugFix: shortcode (<?php) in pde-form-walker.php

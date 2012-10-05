@@ -3,7 +3,7 @@ For adding an external file to the plugin, open the `External Files` box from th
 `Folder` text field. Use the `Browse` button to select a file from the local system.
 Click on `Add to Plugin`. PDE adds the file to the plugin.
 
-Please note that PDE makes a copy of the file and saves it in the wordpress installation.
+Please note that PDE makes a copy of the file and saves it in the wordpress database.
 The changes made to the file using PDE's editor, do not reflect in the original file.
 
 If you want to replace an external file in the plugin, delete the file from the PDE
@@ -11,6 +11,9 @@ project and add it again using the above instructions.
 
 You can also add new empty files to your plugin. Use the `Folder` and `File Name` text
 fields below in the same meta box.
+
+WpPDE also provides a multi file uploader using the same `plupload` plugin used by 
+WordPress.
 
 #### Including the files
 

@@ -1022,7 +1022,34 @@ class PDEPlugin {
   </div>
 </form>
 
+<form id="pde-plugin-add-file-multi" action="#" class="pde-plugin-add-files" method="post" enctype="multipart/form-data">
+  <?php wp_nonce_field('add-pdeplugin-file-' . $plugin_id); ?>
+  <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
+  <input type="hidden" value="add-file-multi" name="action" />
+  <div id="html-upload-ui-multi">
+    <p id="metadiv-add-files-multi">
+      <label class="metabox-side-label" for="metadiv-path-multi"><?php _e('Folder:'); ?></label>
+        <input id="metadiv-path-multi" name="file_path_multi" value=""  type="text" class=" widefat metabox-side-input metabox-side-input-path "  />
+    </p>
+
+
+<div id="plupload-container">
+    <div id="plupload-filelist">No runtime found.</div>
+    <br />
+    <p class="button-controls">
+      <span class="update-options">
+        <img class="waiting" src="<?php echo esc_url( admin_url( 'images/wpspin_light.gif' ) ); ?>" alt="" />
+        <input type="submit"<?php disabled( $plugin_id, 0 ); ?> class="button-secondary submit-add-to-plugin" value="<?php esc_attr_e('Select Files'); ?>" name="add-pdeplugin-file" id="submit-pdepluginaddfile-multi-select"/>
+        <input type="submit"<?php disabled( $plugin_id, 0 ); ?> class="button-secondary submit-add-to-plugin" value="<?php esc_attr_e('Add to Plugin'); ?>" name="add-pdeplugin-file" id="submit-pdepluginaddfile-multi"/>
+      </span>
+    </p>
+    <div class="clear"></div>
+  </div>
+</div>
+</form>
+
   <?php
+include_once 'plupload-form.php';
   }
 
   static function emit_file_markup( $file ) {
@@ -1731,6 +1758,7 @@ class PDEPlugin {
 		wp_enqueue_script('ace_0.2-keybinding-vim');
     wp_enqueue_script('jquery-ui-datepicker');
     wp_enqueue_script('jquery-ui-tabs');
+    wp_enqueue_script('plupload-all');
   }
 
   function emit_editor_widgets($current_file) {

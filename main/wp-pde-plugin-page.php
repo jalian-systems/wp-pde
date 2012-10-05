@@ -51,6 +51,31 @@ switch ( $action ) {
 		update_user_meta( $current_user->ID, 'wp_pde_ace_indent_guides', $_REQUEST['ace-editor-indent-guides']);
     break ;
 
+  case 'add-file-multi':
+		check_admin_referer( 'add-pdeplugin-file-' . $pde_plugin_selected_id );
+    $_plugin_object = PDEPlugin::get( $pde_plugin_selected_id );
+    $files = isset( $_REQUEST['files'] ) ? $_REQUEST['files'] : array();
+    if( !is_wp_error( $_plugin_object ) ) {
+        $path = empty( $_REQUEST['file_path_multi'] ) ? '' : $_REQUEST['file_path_multi'] . '/' ;
+        $tmppath = sys_get_temp_dir() . "plupload/";
+        foreach( $files as $file ) {
+          $src = $tmppath . $file ;
+          if( !file_exists( $src ) ) {
+            WpPDEPlugin::messages('error', ' File ' . $src . ' does not exist in ' . $tmppath, $messages);
+          } else {
+            $item = $_plugin_object->create_external_file($path . $file, file_get_contents( $src ) );
+            if( is_wp_error( $item ) )
+              WpPDEPlugin::messages('error', $item->get_error_message(), $messages);
+            unlink( $src );
+          }
+        }
+    } else {
+      WpPDEPlugin::messages('error', $_plugin_object->get_error_message(), $messages);
+      unset($_plugin_object);
+    }
+
+    break ;
+
   case 'add-file':
   case 'add-file-new':
 		check_admin_referer( 'add-pdeplugin-file-' . $pde_plugin_selected_id );
