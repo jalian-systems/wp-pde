@@ -1813,7 +1813,6 @@ include_once 'plupload-form.php';
       if( has_filter( $filter ) ) {
         return apply_filters( $filter, '', $this, $current_file) ;
       } else {
-        fb('Unknown emit for ' . $type);
         return '' ;
       }
     }
