@@ -975,6 +975,8 @@ class PDEPlugin {
 </form>
 <?php endif; ?>
 
+<hr style="color:#D1E5EE"/>
+<h4>Upload a file</h4>
 <form id="pde-plugin-add-file" action="#" class="pde-plugin-add-files" method="post" enctype="multipart/form-data">
   <?php wp_nonce_field('add-pdeplugin-file-' . $plugin_id); ?>
   <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
@@ -998,6 +1000,8 @@ class PDEPlugin {
   </div>
 </form>
 
+<hr style="color:#D1E5EE"/>
+<h4>Create an empty file</h4>
 <form id="pde-plugin-add-file-new" action="#" class="pde-plugin-add-files" method="post" enctype="multipart/form-data">
   <?php wp_nonce_field('add-pdeplugin-file-' . $plugin_id); ?>
   <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
@@ -1022,6 +1026,8 @@ class PDEPlugin {
   </div>
 </form>
 
+<hr style="color:#D1E5EE"/>
+<h4>Upload multiple files (beta)</h4>
 <form id="pde-plugin-add-file-multi" action="#" class="pde-plugin-add-files" method="post" enctype="multipart/form-data">
   <?php wp_nonce_field('add-pdeplugin-file-' . $plugin_id); ?>
   <input type="hidden" value="<?php echo $plugin_id; ?>" name="plugin" />
@@ -1049,7 +1055,7 @@ class PDEPlugin {
 </form>
 
   <?php
-include_once 'plupload-form.php';
+include_once 'plupload-script.php';
   }
 
   static function emit_file_markup( $file ) {

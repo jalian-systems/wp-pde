@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
     browse_button : 'submit-pdepluginaddfile-multi-select',
     container : 'plupload-container',
     max_file_size : '10mb',
-    url : '<?php echo plugins_url('upload.php', __FILE__ ); ?>',
+    url : '<?php echo plugins_url('plupload.php', __FILE__ ); ?>',
     flash_swf_url : '/plupload/js/plupload.flash.swf',
     silverlight_xap_url : '/plupload/js/plupload.silverlight.xap',
   });
